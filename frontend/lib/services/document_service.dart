@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:frontend/domain/constants/api_constants.dart';
+import 'package:frontend/domain/models/request/create_document.dart';
 
 import '../domain/models/entities/document.dart';
 import 'package:http/http.dart' as http;
@@ -35,5 +36,9 @@ class DocumentService {
 
       throw Exception(errorDetails.message);
     }
+  }
+
+  Future<Document> uploadDocument(CreateDocument createDocument, String folderId) async {
+    
   }
 }

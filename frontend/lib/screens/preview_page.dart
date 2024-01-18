@@ -8,8 +8,13 @@ class PreviewPage extends StatelessWidget {
   final XFile picture;
   final double buttonHeight = 60;
   final Function onClose;
+  final Function onSend;
 
-  const PreviewPage({Key? key, required this.picture, required this.onClose})
+  const PreviewPage(
+      {Key? key,
+      required this.picture,
+      required this.onClose,
+      required this.onSend})
       : super(key: key);
 
   @override
@@ -22,7 +27,7 @@ class PreviewPage extends StatelessWidget {
               width: size.width,
               height: size.height,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Image.file(File(picture.path),
                       fit: BoxFit.cover,
@@ -53,5 +58,10 @@ class PreviewPage extends StatelessWidget {
                 ],
               ))),
     );
+  }
+
+  @override
+  void dispose() {
+    onClose();
   }
 }

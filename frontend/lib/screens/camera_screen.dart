@@ -1,10 +1,14 @@
+import 'dart:html';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/screens/preview_page.dart';
+import 'package:frontend/services/document_service.dart';
 
 class CameraScreen extends StatefulWidget {
-  const CameraScreen({Key? key}) : super(key: key);
+  CameraScreen({Key? key}) : super(key: key);
+
 
   @override
   State<StatefulWidget> createState() {
@@ -15,6 +19,7 @@ class CameraScreen extends StatefulWidget {
 class _CameraScreenState extends State<CameraScreen> {
   late CameraController _cameraController;
   bool isCameraReady = false;
+  final DocumentService documentService = DocumentService();
 
   @override
   void initState() {
@@ -101,19 +106,17 @@ class _CameraScreenState extends State<CameraScreen> {
       return;
     }
 
-    await _cameraController.pausePreview();
     XFile picture = await _cameraController.takePicture();
 
-    if (context.mounted) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => PreviewPage(
-                  picture: picture,
-                  onClose: () {
-                    Navigator.pop(context);
-                    _cameraController.resumePreview();
-                  })));
-    }
+    await Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => PreviewPage(
+            picture: picture,
+            onClose: () {
+              Navigator.pop(context);
+              _cameraController.resumePreview();
+            },
+            onSend: () {
+              documentService.
+            })));
   }
 }
