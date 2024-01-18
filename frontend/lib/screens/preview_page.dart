@@ -7,8 +7,10 @@ import 'package:frontend/common/common.dart';
 class PreviewPage extends StatelessWidget {
   final XFile picture;
   final double buttonHeight = 60;
+  final Function onClose;
 
-  const PreviewPage({Key? key, required this.picture}) : super(key: key);
+  const PreviewPage({Key? key, required this.picture, required this.onClose})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,19 +22,21 @@ class PreviewPage extends StatelessWidget {
               width: size.width,
               height: size.height,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Image.file(File(picture.path),
-                      fit: BoxFit.contain,
-                      width: 0.9 * size.width,
-                      height: 0.8 * size.height),
+                      fit: BoxFit.cover,
+                      height: 0.9 * size.height,
+                      width: size.width),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Container(
                           height: buttonHeight,
                           child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                onClose();
+                              },
                               style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.red),
                               child: Text(

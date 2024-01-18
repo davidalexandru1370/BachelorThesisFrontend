@@ -101,11 +101,19 @@ class _CameraScreenState extends State<CameraScreen> {
       return;
     }
 
+    await _cameraController.pausePreview();
     XFile picture = await _cameraController.takePicture();
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Dialog(child: PreviewPage(picture: picture));
-        });
+
+    if (context.mounted) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => PreviewPage(
+                  picture: picture,
+                  onClose: () {
+                    Navigator.pop(context);
+                    _cameraController.resumePreview();
+                  })));
+    }
   }
 }
