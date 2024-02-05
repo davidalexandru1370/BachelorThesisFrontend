@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:frontend/domain/constants/api_constants.dart';
-import 'package:frontend/domain/models/request/create_document.dart';
 
 import '../domain/models/entities/document.dart';
 import 'package:http/http.dart' as http;
@@ -27,7 +26,7 @@ class DocumentService {
       var jsonList = jsonDecode(body) as List;
 
       var assignments =
-          jsonList.map((json) => Document.fromJson(json)).toList();
+          jsonList.map((json) => Document.fromMap(json)).toList();
 
       return assignments;
     } else {
@@ -38,7 +37,4 @@ class DocumentService {
     }
   }
 
-  Future<Document> uploadDocument(CreateDocument createDocument, String folderId) async {
-    
-  }
 }

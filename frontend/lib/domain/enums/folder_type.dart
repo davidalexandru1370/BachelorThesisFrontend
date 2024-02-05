@@ -1,0 +1,3 @@
+enum FolderType{
+  alreadyRegisteredVehicleInCountry
+}

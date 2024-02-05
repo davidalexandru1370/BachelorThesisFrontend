@@ -7,7 +7,7 @@ import 'package:frontend/screens/preview_page.dart';
 import 'package:frontend/services/document_service.dart';
 
 class CameraScreen extends StatefulWidget {
-  CameraScreen({Key? key}) : super(key: key);
+  const CameraScreen({Key? key}) : super(key: key);
 
 
   @override
@@ -116,7 +116,7 @@ class _CameraScreenState extends State<CameraScreen> {
               _cameraController.resumePreview();
             },
             onSend: () {
-              documentService.
+
             })));
   }
 }
