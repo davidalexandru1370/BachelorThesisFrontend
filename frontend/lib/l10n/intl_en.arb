@@ -1,1 +1,20 @@
-{}
+{
+  "helloWorld": "Hello World!",
+  "@helloWorld": {
+    "description": "The conventional newborn programmer greeting"
+  },
+  "forgotPassword": "Forgot Password?",
+  "@forgotPassword": {
+    "description": "A link to the forgot password page"
+  },
+  "uploadPhoto": "Upload Photo",
+  "retakePhoto": "Retake Photo",
+  "submit": "Send",
+  "cancel": "Cancel",
+  "carRegisteredInCountry": "Vehicle already registered in country",
+  "carFromAnotherCountry": "Vehicle registered in another country",
+  "carNeverRegistered": "New vehicle never registered",
+  "@carNeverRegistered": {
+    "description": "A new vehicle that has never been registered before"
+  }
+}

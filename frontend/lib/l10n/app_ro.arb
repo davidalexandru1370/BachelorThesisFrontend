@@ -1,6 +1,11 @@
 {
   "helloWorld": "Buna ziua!",
   "forgotPassword": "Ai uitat parola?",
-  "uploadPhoto":"Incarca imaginea",
-  "retakePhoto":"Anuleaza incarcarea"
+  "uploadPhoto": "Incarca imaginea",
+  "retakePhoto": "Anuleaza incarcarea",
+  "submit": "Trimite",
+  "cancel": "Anuleaza",
+  "carRegisteredInCountry": "Masina inmatriculata in tara",
+  "carFromAnotherCountry": "Masina din alta tara",
+  "carNeverRegistered": "Masina inregistrata pentru prima data"
 }
