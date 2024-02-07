@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:frontend/screens/login_screen.dart';
 
-import '../domain/models/entities/auth_result.dart';
-import '../domain/models/entities/user_credentials.dart';
-import '../services/user_service.dart';
+import '../../domain/models/entities/auth_result.dart';
+import '../../domain/models/entities/user_credentials.dart';
+import '../../services/user_service.dart';
 import '../widgets/login_with_facebook_button.dart';
 import '../widgets/login_with_google_button.dart';
+import 'login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   static const String id = 'register_screen';

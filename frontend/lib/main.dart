@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/widgets/navigation_bar.dart';
+import 'package:frontend/presentation/widgets/navigation_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -23,7 +23,7 @@ class _MyApp extends State<MyApp> {
         create: (context) => LocaleModel(),
         child: Consumer<LocaleModel>(
             builder: (context, localeModel, child) => MaterialApp(
-                title: 'Flutter Demo',
+                title: 'SDIA',
                 theme: ThemeData(
                   colorScheme: ColorScheme.fromSeed(
                       seedColor: const Color.fromARGB(255, 119, 119, 119)),
@@ -31,6 +31,13 @@ class _MyApp extends State<MyApp> {
                 ),
                 supportedLocales: AppLocalizations.supportedLocales,
                 locale: localeModel.locale,
+                localeListResolutionCallback: (allLocales, supportedLocales) {
+                  final locale = allLocales?.first.languageCode;
+                  if (locale != 'ro') {
+                    return Locale(locale!);
+                  }
+                  return const Locale("ro");
+                },
                 localizationsDelegates: AppLocalizations.localizationsDelegates,
                 home: ApplicationNavigationBar())));
   }

@@ -2,7 +2,8 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/common/common.dart';
+
+import '../l10n/app_l10n.dart';
 
 class PreviewPage extends StatelessWidget {
   final XFile picture;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/utilities/custom_icons.dart';
-import 'package:frontend/widgets/button.dart';
+
+import '../utilities/custom_icons.dart';
+import 'button.dart';
 
 class LoginWithGoogleButton extends StatelessWidget {
   const LoginWithGoogleButton({Key? key}) : super(key: key);

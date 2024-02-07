@@ -1,7 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/screens/preview_page.dart';
+import 'package:frontend/presentation/screens/preview_page.dart';
 import 'package:frontend/services/document_service.dart';
 
 class CameraScreen extends StatefulWidget {

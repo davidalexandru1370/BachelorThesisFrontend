@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../common/common.dart';
+import '../l10n/app_l10n.dart';
+
 
 class CreateNewFolderScreen extends StatefulWidget {
   const CreateNewFolderScreen({super.key});

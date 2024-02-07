@@ -1,7 +1,9 @@
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/screens/camera_screen.dart';
-import 'package:frontend/screens/main_page.dart';
+
+import '../l10n/app_l10n.dart';
+import '../screens/main_page.dart';
+import '../screens/new_folder_screen.dart';
+
 
 class ApplicationNavigationBar extends StatefulWidget {
   const ApplicationNavigationBar({Key? key}) : super(key: key);
@@ -15,13 +17,15 @@ class _ApplicationNavigationBarState extends State<ApplicationNavigationBar> {
 
   @override
   Widget build(BuildContext context) {
+    var localization = getAppLocalizations(context);
     return Scaffold(
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
           if (index == 1) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const CameraScreen()),
+              MaterialPageRoute(
+                  builder: (context) => const CreateNewFolderScreen()),
             );
           } else {
             setState(() {
@@ -31,18 +35,18 @@ class _ApplicationNavigationBarState extends State<ApplicationNavigationBar> {
         },
         indicatorColor: Colors.amber[800],
         selectedIndex: _currentPageIndex,
-        destinations: const <Widget>[
-          NavigationDestination(
+        destinations: <Widget>[
+          const NavigationDestination(
             icon: Icon(Icons.home),
             selectedIcon: Icon(Icons.home),
             label: 'Home',
           ),
           NavigationDestination(
-            icon: Icon(Icons.camera),
-            selectedIcon: Icon(Icons.camera),
-            label: 'Camera',
+            icon: Icon(Icons.folder),
+            selectedIcon: Icon(Icons.folder),
+            label: localization!.submit,
           ),
-          NavigationDestination(
+          const NavigationDestination(
             icon: Icon(Icons.person_outline),
             selectedIcon: Icon(Icons.person),
             label: 'Profile',

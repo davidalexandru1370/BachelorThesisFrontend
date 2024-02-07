@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:frontend/utilities/custom_icons.dart';
 
+import '../utilities/custom_icons.dart';
 import 'button.dart';
 
 class LoginWithFacebookButton extends StatelessWidget {
