@@ -90,11 +90,17 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
                   ),
                 ),
                 Container(
+                  alignment: Alignment.topLeft,
                   height: MediaQuery.of(context).size.height * 0.5,
                   child: ListView.builder(
                     itemCount: images.length,
                     itemBuilder: (context, index) {
-                      return Image.file(File(images[index].path));
+                      return Row(
+                        children: [
+                          Image.file(File(images[index].path),
+                              fit: BoxFit.fitHeight, height: 125, width: 200),
+                        ],
+                      );
                     },
                     shrinkWrap: true,
                   ),
@@ -120,7 +126,7 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
       context,
       MaterialPageRoute(builder: (context) => screen),
     ).then((value) {
-      if(value == null){
+      if (value == null) {
         return;
       }
       _onPictureTaken(value as XFile);
