@@ -3,10 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/presentation/screens/preview_page.dart';
 import 'package:frontend/services/document_service.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CameraScreen extends StatefulWidget {
-  const CameraScreen({Key? key}) : super(key: key);
-
+  CameraScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -114,7 +116,8 @@ class _CameraScreenState extends State<CameraScreen> {
               _cameraController.resumePreview();
             },
             onSend: () {
-
+              Navigator.pop(context);
+              Navigator.pop(context, picture);
             })));
   }
 }

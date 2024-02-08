@@ -43,6 +43,8 @@ dependencies:
   uuid: ^4.2.2
   camera: ^0.10.5+5
   logger: ^2.0.2+1
+  image_picker: ^1.0.7
+
 
 
 dev_dependencies:

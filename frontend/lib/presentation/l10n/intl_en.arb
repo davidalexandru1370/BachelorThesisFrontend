@@ -16,5 +16,12 @@
   "carNeverRegistered": "New vehicle never registered",
   "@carNeverRegistered": {
     "description": "A new vehicle that has never been registered before"
-  }
+  },
+  "home": "Home",
+  "profile": "Profile",
+  "settings": "Settings",
+  "logout": "Logout",
+  "camera": "Camera",
+  "gallery": "Gallery",
+  "addImage": "Add image"
 }

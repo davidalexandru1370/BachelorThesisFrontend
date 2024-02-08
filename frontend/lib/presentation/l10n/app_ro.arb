@@ -7,5 +7,12 @@
   "cancel": "Anuleaza",
   "carRegisteredInCountry": "Masina inmatriculata in tara",
   "carFromAnotherCountry": "Masina din alta tara",
-  "carNeverRegistered": "Masina inregistrata pentru prima data"
+  "carNeverRegistered": "Masina inregistrata pentru prima data",
+  "home": "Acasa",
+  "profile": "Profil",
+  "settings": "Setari",
+  "logout": "Deconectare",
+  "camera": "Camera",
+  "gallery": "Galerie",
+  "addImage": "Adauga imagine"
 }

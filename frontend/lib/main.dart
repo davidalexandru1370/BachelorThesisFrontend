@@ -31,22 +31,15 @@ class _MyApp extends State<MyApp> {
                 ),
                 supportedLocales: AppLocalizations.supportedLocales,
                 locale: localeModel.locale,
-                localeListResolutionCallback: (allLocales, supportedLocales) {
-                  final locale = allLocales?.first.languageCode;
-                  if (locale != 'ro') {
-                    return Locale(locale!);
-                  }
-                  return const Locale("ro");
-                },
                 localizationsDelegates: AppLocalizations.localizationsDelegates,
-                home: ApplicationNavigationBar())));
+                home: const ApplicationNavigationBar())));
   }
 }
 
 class LocaleModel extends ChangeNotifier {
   Locale? _locale;
 
-  Locale? get locale => _locale;
+  Locale? get locale => _locale ?? const Locale("ro");
 
   void setLocale(Locale value) {
     _locale = value;

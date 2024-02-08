@@ -51,7 +51,9 @@ class PreviewPage extends StatelessWidget {
                         Container(
                           height: buttonHeight,
                           child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                onSend();
+                              },
                               child: Text(
                                   getAppLocalizations(context)!.uploadPhoto)),
                         ),
