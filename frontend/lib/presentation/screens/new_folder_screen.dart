@@ -17,11 +17,15 @@ class CreateNewFolderScreen extends StatefulWidget {
 class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
   List<XFile> images = [];
   final _popupMenuKey = GlobalKey<PopupMenuButtonState>();
+  List<String> values = [];
+  String _dropdownValue = "";
 
   @override
   Widget build(BuildContext context) {
     var localization = getAppLocalizations(context);
-
+    if(_dropdownValue == ""){
+      _dropdownValue = localization!.carFromAnotherCountry;
+    }
     return Scaffold(
       body: SizedBox(
         width: double.infinity,
@@ -32,25 +36,31 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
             Column(
               children: [
                 DropdownButton(
+                    value: _dropdownValue,
+                    onChanged: (value) {
+                      setState(() {
+                        _dropdownValue = value.toString();
+                      });
+                    },
                     borderRadius: BorderRadius.circular(10),
                     items: [
                       DropdownMenuItem(
                         value: localization!.carFromAnotherCountry,
                         child: Text(localization.carFromAnotherCountry),
+
                       ),
                       DropdownMenuItem(
                         value: localization.carNeverRegistered,
                         child: Text(localization.carNeverRegistered),
-                        onTap: () {},
+
                       ),
                       DropdownMenuItem(
                         value: localization.carRegisteredInCountry,
                         child: Text(localization.carRegisteredInCountry),
+
                       ),
                     ],
-                    onChanged: (value) {
-                      _onDropdownItemSelected(value as String);
-                    }),
+                ),
                 PopupMenuButton(
                   position: PopupMenuPosition.under,
                   key: _popupMenuKey,
@@ -96,6 +106,7 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
                     itemCount: images.length,
                     itemBuilder: (context, index) {
                       return Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Image.file(File(images[index].path),
                               fit: BoxFit.fitHeight, height: 125, width: 200),
@@ -119,7 +130,12 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
     );
   }
 
-  void _onDropdownItemSelected(String newValueSelected) {}
+  void _onDropdownItemSelected(String newValueSelected) {
+    setState(() {
+      print("aici " + newValueSelected);
+      _dropdownValue = newValueSelected;
+    });
+  }
 
   void _onPopupMenuItemSelected(StatefulWidget screen) {
     Navigator.push(
