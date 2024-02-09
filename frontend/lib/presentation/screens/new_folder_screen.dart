@@ -3,7 +3,10 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/domain/models/request/create_document.dart';
+import 'package:frontend/domain/models/request/create_folder.dart';
 import 'package:frontend/presentation/screens/camera_screen.dart';
+import 'package:frontend/services/folder_service.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../l10n/app_l10n.dart';
@@ -16,11 +19,12 @@ class CreateNewFolderScreen extends StatefulWidget {
 }
 
 class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
-  List<XFile> images = [];
+  List<XFile> _images = [];
   final _popupMenuKey = GlobalKey<PopupMenuButtonState>();
   List<String> values = [];
   String _dropdownValue = "";
   final ImagePicker _imagePicker = ImagePicker();
+  final FolderService _folderService = FolderService();
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +108,7 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
                   margin: const EdgeInsets.all(10),
                   child: ListView.separated(
                     physics: const BouncingScrollPhysics(),
-                    itemCount: images.length,
+                    itemCount: _images.length,
                     itemBuilder: (context, index) {
                       return Card(
                         shape: RoundedRectangleBorder(
@@ -116,7 +120,7 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
                             SizedBox(
                               width: 100,
                               height: 125,
-                              child: Image.file(File(images[index].path),
+                              child: Image.file(File(_images[index].path),
                                   fit: BoxFit.fill),
                             ),
                             Column(
@@ -125,12 +129,11 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
                                 IconButton(
                                   onPressed: () {
                                     setState(() {
-                                      images.removeAt(index);
+                                      _images.removeAt(index);
                                     });
                                   },
                                   icon: const Icon(Icons.delete),
                                   color: Colors.red,
-
                                 ),
                               ],
                             ),
@@ -147,10 +150,10 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
               ],
             ),
             ElevatedButton(
-              onPressed: () {
-                // Add folder to database
-              },
               child: Text(localization!.submit),
+              onPressed: () async {
+                await _onSubmit();
+              },
             ),
           ],
         ),
@@ -172,7 +175,7 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
 
   void _onPictureTaken(XFile picture) {
     setState(() {
-      images.add(picture);
+      _images.add(picture);
     });
   }
 
@@ -184,7 +187,18 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
     }
 
     setState(() {
-      images.add(image);
+      _images.add(image);
     });
+  }
+
+  Future<void> _onSubmit() async {
+    var folder = CreateFolder(
+      name: _dropdownValue,
+      document: _images.map((e) => CreateDocument(image: e)).toList(),
+    );
+
+    try {
+      await _folderService.createFolder(folder);
+    } catch (e) {}
   }
 }
