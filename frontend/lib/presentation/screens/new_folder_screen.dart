@@ -106,17 +106,36 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
                     physics: const BouncingScrollPhysics(),
                     itemCount: images.length,
                     itemBuilder: (context, index) {
-                      return Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            width: 100,
-                            height: 125,
-                            child: Image.file(File(images[index].path),
-                                fit: BoxFit.fill),
-                          ),
-                        ],
+                      return Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width: 100,
+                              height: 125,
+                              child: Image.file(File(images[index].path),
+                                  fit: BoxFit.fill),
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      images.removeAt(index);
+                                    });
+                                  },
+                                  icon: const Icon(Icons.delete),
+                                  color: Colors.red,
+
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       );
                     },
                     shrinkWrap: true,
