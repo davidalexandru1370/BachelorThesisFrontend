@@ -4,6 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/presentation/screens/camera_screen.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../l10n/app_l10n.dart';
 
@@ -19,11 +20,12 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
   final _popupMenuKey = GlobalKey<PopupMenuButtonState>();
   List<String> values = [];
   String _dropdownValue = "";
+  final ImagePicker _imagePicker = ImagePicker();
 
   @override
   Widget build(BuildContext context) {
     var localization = getAppLocalizations(context);
-    if(_dropdownValue == ""){
+    if (_dropdownValue == "") {
       _dropdownValue = localization!.carFromAnotherCountry;
     }
     return Scaffold(
@@ -36,30 +38,27 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
             Column(
               children: [
                 DropdownButton(
-                    value: _dropdownValue,
-                    onChanged: (value) {
-                      setState(() {
-                        _dropdownValue = value.toString();
-                      });
-                    },
-                    borderRadius: BorderRadius.circular(10),
-                    items: [
-                      DropdownMenuItem(
-                        value: localization!.carFromAnotherCountry,
-                        child: Text(localization.carFromAnotherCountry),
-
-                      ),
-                      DropdownMenuItem(
-                        value: localization.carNeverRegistered,
-                        child: Text(localization.carNeverRegistered),
-
-                      ),
-                      DropdownMenuItem(
-                        value: localization.carRegisteredInCountry,
-                        child: Text(localization.carRegisteredInCountry),
-
-                      ),
-                    ],
+                  value: _dropdownValue,
+                  onChanged: (value) {
+                    setState(() {
+                      _dropdownValue = value.toString();
+                    });
+                  },
+                  borderRadius: BorderRadius.circular(10),
+                  items: [
+                    DropdownMenuItem(
+                      value: localization!.carFromAnotherCountry,
+                      child: Text(localization.carFromAnotherCountry),
+                    ),
+                    DropdownMenuItem(
+                      value: localization.carNeverRegistered,
+                      child: Text(localization.carNeverRegistered),
+                    ),
+                    DropdownMenuItem(
+                      value: localization.carRegisteredInCountry,
+                      child: Text(localization.carRegisteredInCountry),
+                    ),
+                  ],
                 ),
                 PopupMenuButton(
                   position: PopupMenuPosition.under,
@@ -87,7 +86,7 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
                           ],
                         ),
                         onTap: () {
-                          _onPopupMenuItemSelected(CameraScreen());
+                          _onGalleryImageSelected();
                         },
                       ),
                     ];
@@ -105,12 +104,21 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
                   child: ListView.builder(
                     itemCount: images.length,
                     itemBuilder: (context, index) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Image.file(File(images[index].path),
-                              fit: BoxFit.fitHeight, height: 125, width: 200),
-                        ],
+                      return Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: 100,
+                              height: 125,
+                              child: Image.file(File(images[index].path),
+                                  fit: BoxFit.fill),
+                            ),
+                          ],
+                        ),
                       );
                     },
                     shrinkWrap: true,
@@ -130,13 +138,6 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
     );
   }
 
-  void _onDropdownItemSelected(String newValueSelected) {
-    setState(() {
-      print("aici " + newValueSelected);
-      _dropdownValue = newValueSelected;
-    });
-  }
-
   void _onPopupMenuItemSelected(StatefulWidget screen) {
     Navigator.push(
       context,
@@ -152,6 +153,18 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
   void _onPictureTaken(XFile picture) {
     setState(() {
       images.add(picture);
+    });
+  }
+
+  void _onGalleryImageSelected() async {
+    var image = await _imagePicker.pickImage(source: ImageSource.gallery);
+
+    if (image == null) {
+      return;
+    }
+
+    setState(() {
+      images.add(image);
     });
   }
 }
