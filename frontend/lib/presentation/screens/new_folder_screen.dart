@@ -101,27 +101,28 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
                 Container(
                   alignment: Alignment.topLeft,
                   height: MediaQuery.of(context).size.height * 0.5,
-                  child: ListView.builder(
+                  margin: const EdgeInsets.all(10),
+                  child: ListView.separated(
+                    physics: const BouncingScrollPhysics(),
                     itemCount: images.length,
                     itemBuilder: (context, index) {
-                      return Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15)),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              width: 100,
-                              height: 125,
-                              child: Image.file(File(images[index].path),
-                                  fit: BoxFit.fill),
-                            ),
-                          ],
-                        ),
+                      return Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: 100,
+                            height: 125,
+                            child: Image.file(File(images[index].path),
+                                fit: BoxFit.fill),
+                          ),
+                        ],
                       );
                     },
                     shrinkWrap: true,
+                    separatorBuilder: (BuildContext context, int index) {
+                      return const Divider();
+                    },
                   ),
                 ),
               ],
