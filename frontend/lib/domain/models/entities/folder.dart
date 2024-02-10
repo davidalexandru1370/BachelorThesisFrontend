@@ -1,9 +1,9 @@
-import 'dart:html';
-
 import 'package:frontend/domain/models/abstract/serializable_entity.dart';
 
 import '../../enums/folder_type.dart';
 import 'package:uuid/uuid.dart';
+
+import 'document.dart';
 
 class Folder extends SerializableEntity {
   Uuid id;

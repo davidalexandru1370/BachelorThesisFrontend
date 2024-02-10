@@ -13,4 +13,9 @@ class CreateDocument extends SerializableEntity {
       'image': image,
     };
   }
+
+  @override
+  String toString() {
+    return 'CreateDocument{image: $image}';
+  }
 }

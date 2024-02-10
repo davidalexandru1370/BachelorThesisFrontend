@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
@@ -199,6 +200,9 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
 
     try {
       await _folderService.createFolder(folder);
-    } catch (e) {}
+    } on TimeoutException {
+    } catch (e) {
+      print(e);
+    }
   }
 }

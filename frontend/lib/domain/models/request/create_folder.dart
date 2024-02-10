@@ -6,4 +6,8 @@ class CreateFolder {
 
   CreateFolder({required this.name, required this.document});
 
+  @override
+  String toString() {
+    return 'CreateFolder{name: $name, document: $document}';
+  }
 }

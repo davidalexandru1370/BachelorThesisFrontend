@@ -44,6 +44,7 @@ dependencies:
   camera: ^0.10.5+5
   logger: ^2.0.2+1
   image_picker: ^1.0.7
+  dio: ^5.4.0
 
 
 
