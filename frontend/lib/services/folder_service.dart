@@ -1,57 +1,54 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:frontend/domain/constants/api_constants.dart';
+import 'package:frontend/domain/constants/app_constants.dart';
+import 'package:frontend/domain/exceptions/unauthenticated_exception.dart';
 import 'package:logger/logger.dart';
 import '../domain/models/entities/Folder.dart';
-import 'package:http_parser/http_parser.dart';
 
 import '../domain/models/request/create_folder.dart';
 
 class FolderService {
   final String _controller = "folder";
   var logger = Logger();
+  final _secureStorage = const FlutterSecureStorage();
+
+  FolderService() {
+    if (_secureStorage.containsKey(key: AppConstants.TOKEN) == false) {
+      throw UnauthenticatedException('Token not found');
+    }
+  }
 
   Future<Folder> createFolder(CreateFolder folder) async {
     logger.log(Level.info, 'Creating folder: $folder');
     var headers = {
-      'Authorization':
-          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIyMWVmZWQ3OC04OWRjLTQ4NTEtYWJiMi1lMDBlMTNkNzhiMTIiLCJlbWFpbCI6InN0cmluZyIsIm5iZiI6MTcwNzUxNjc2MiwiZXhwIjoxNzA4MTIxNTYyLCJpYXQiOjE3MDc1MTY3NjIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTAwMC8iLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo1MDAxLyJ9.2tH45RPukSyG7RZzAX8DdzHUfBPwHcALhLjPP21u7Us',
+      'Authorization': 'Bearer ${_secureStorage.read(key: AppConstants.TOKEN)}',
       'Content-Type': 'multipart/form-data'
     };
+
     var data = FormData.fromMap({
       'name': 'asd',
-      // 'Documents[0].File': "a",
-      // 'Documents[0].File': await MultipartFile.fromFile(
-      //     folder.document[0].image.path,
-      //     filename: folder.document[0].image.path),
-      // 'Documents[1].File': await MultipartFile.fromFile(
-      //     folder.document[0].image.path,
-      //     filename: folder.document[0].image.path),
     });
 
     data.files.addAll([
       MapEntry('Documents[0].File', MultipartFile.fromString("")),
       MapEntry(
         'Documents[0].File',
-        await MultipartFile.fromFile(
-          folder.document[0].image.path,
-          filename: folder.document[0].image.path,
-          contentType: MediaType('image', 'jpeg'),
-        ),
+        await MultipartFile.fromFile(folder.document[0].image.path,
+            filename: folder.document[0].image.path),
       ),
       MapEntry(
         'Documents[1].File',
-        await MultipartFile.fromFile(
-          folder.document[0].image.path,
-          filename: folder.document[0].image.path,
-          contentType: MediaType('image', 'jpeg'),
-        ),
+        await MultipartFile.fromFile(folder.document[0].image.path,
+            filename: folder.document[0].image.path),
       ),
     ]);
 
     var dio = Dio();
     var response = await dio.request(
-      'http://192.168.1.8:5176/api/folder/',
+      '${ApiConstants.BASE_URL}/${_controller}/',
       options: Options(
         method: 'POST',
         headers: headers,
