@@ -29,22 +29,18 @@ class FolderService {
     };
 
     var data = FormData.fromMap({
-      'name': 'asd',
+      'name': '${folder.name}',
     });
 
     data.files.addAll([
       MapEntry('Documents[0].File', MultipartFile.fromString("")),
-      MapEntry(
-        'Documents[0].File',
-        await MultipartFile.fromFile(folder.document[0].image.path,
-            filename: folder.document[0].image.path),
-      ),
-      MapEntry(
-        'Documents[1].File',
-        await MultipartFile.fromFile(folder.document[0].image.path,
-            filename: folder.document[0].image.path),
-      ),
     ]);
+
+    for(var i = 0; i < folder.document.length; i++){
+      data.files.addAll([
+        MapEntry('Documents[$i].File', await MultipartFile.fromFile(folder.document[i].image.path)),
+      ]);
+    }
 
     var dio = Dio();
     var response = await dio.request(
@@ -57,12 +53,12 @@ class FolderService {
     );
 
     if (response.statusCode == 200) {
-      print(json.encode(response.data));
+      logger.log(Level.info, 'Folder created successfully');
     } else {
-      print(response.statusMessage);
+      logger.log(Level.error, response.statusMessage);
     }
 
     return Folder.fromMap(jsonDecode(response.data));
-    //return Folder.fromMap(jsonDecode(await response.stream.bytesToString()));
+
   }
 }

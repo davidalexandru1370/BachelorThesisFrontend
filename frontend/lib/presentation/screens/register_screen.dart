@@ -230,11 +230,11 @@ class _RegisterForm extends State<RegisterScreen> {
                                         size: 40,
                                       ))),
                         const Padding(padding: EdgeInsets.all(10)),
-                        const Column(
+                        Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             LoginWithGoogleButton(),
-                            Padding(padding: EdgeInsets.all(10)),
+                            const Padding(padding: EdgeInsets.all(10)),
                             LoginWithFacebookButton()
                           ],
                         ),
