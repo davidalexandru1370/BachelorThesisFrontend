@@ -15,14 +15,13 @@ class LoginWithGoogleButton extends StatelessWidget {
       onPressed: () async {
         List<String> scopes = [
           'email',
-          'https://www.googleapis.com/auth/contacts.readonly'
         ];
         GoogleSignIn googleSignIn = GoogleSignIn(
           scopes: scopes,
         );
         try {
           GoogleSignInAccount? account = await googleSignIn.signIn();
-          print(account?.email);
+          _logger.log(Level.info, account?.email);
         } catch (error) {
           _logger.log(Level.error, error);
         }
