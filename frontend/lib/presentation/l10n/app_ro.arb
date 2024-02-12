@@ -14,5 +14,7 @@
   "logout": "Deconectare",
   "camera": "Camera",
   "gallery": "Galerie",
-  "addImage": "Adauga imagine"
+  "addImage": "Adauga imagine",
+  "loginWithGoogle": "Conecteaza-te cu Google",
+  "errorLoginWithGoogle": "Eroare la conectare cu Google"
 }

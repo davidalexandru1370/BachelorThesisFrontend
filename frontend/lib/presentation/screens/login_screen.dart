@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 import '../../domain/models/entities/auth_result.dart';
 import '../../domain/models/entities/user_credentials.dart';
 import '../l10n/app_l10n.dart';
-import '../widgets/login_with_facebook_button.dart';
 import '../widgets/login_with_google_button.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -266,7 +265,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           children: [
                             LoginWithGoogleButton(),
                             const Padding(padding: EdgeInsets.all(10)),
-                            LoginWithFacebookButton()
                           ],
                         ),
                       ]),

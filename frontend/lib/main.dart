@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/presentation/screens/register_screen.dart';
-import 'package:frontend/presentation/widgets/navigation_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

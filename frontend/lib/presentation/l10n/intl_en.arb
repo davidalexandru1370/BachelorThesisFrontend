@@ -23,5 +23,7 @@
   "logout": "Logout",
   "camera": "Camera",
   "gallery": "Gallery",
-  "addImage": "Add image"
+  "addImage": "Add image",
+  "loginWithGoogle": "Login with Google",
+  "errorLoginWithGoogle": "Error logging with Google"
 }
