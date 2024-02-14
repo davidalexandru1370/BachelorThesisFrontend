@@ -6,9 +6,10 @@ import 'package:frontend/domain/constants/api_constants.dart';
 import 'package:frontend/domain/constants/app_constants.dart';
 import 'package:frontend/domain/exceptions/unauthenticated_exception.dart';
 import 'package:logger/logger.dart';
-import '../domain/models/entities/Folder.dart';
 
-import '../domain/models/request/create_folder.dart';
+import '../../domain/models/entities/folder.dart';
+import '../../domain/models/request/create_folder.dart';
+
 
 class FolderService {
   final String _controller = "folder";

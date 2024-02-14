@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:frontend/domain/models/request/create_document.dart';
 import 'package:frontend/domain/models/request/create_folder.dart';
 import 'package:frontend/presentation/screens/camera_screen.dart';
-import 'package:frontend/services/folder_service.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../application/services/folder_service.dart';
 import '../l10n/app_l10n.dart';
 
 class CreateNewFolderScreen extends StatefulWidget {

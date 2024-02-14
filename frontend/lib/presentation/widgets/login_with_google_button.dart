@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logger/logger.dart';
@@ -8,8 +9,11 @@ import '../utilities/custom_icons.dart';
 import 'button.dart';
 
 class LoginWithGoogleButton extends StatelessWidget {
-  LoginWithGoogleButton({Key? key}) : super(key: key);
+  final Function? afterLoginContinuation;
   final Logger _logger = Logger();
+
+  LoginWithGoogleButton({Key? key, this.afterLoginContinuation = null})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +27,7 @@ class LoginWithGoogleButton extends StatelessWidget {
           ];
           GoogleSignIn googleSignIn = GoogleSignIn(
             scopes: scopes,
+            forceCodeForRefreshToken: true,
             signInOption: SignInOption.standard,
           );
           try {
@@ -35,10 +40,15 @@ class LoginWithGoogleButton extends StatelessWidget {
 
             GoogleSignInAuthentication authentication =
                 await account!.authentication;
-            String? accessToken = authentication.idToken;
-            if (accessToken == null) {
+
+            String? idToken = authentication.idToken;
+            if (idToken == null) {
               _showError(context, localizations.errorLoginWithGoogle);
               return;
+            }
+
+            if (afterLoginContinuation != null) {
+              await afterLoginContinuation!(idToken);
             }
           } catch (error) {
             _showError(context, localizations.errorLoginWithGoogle);

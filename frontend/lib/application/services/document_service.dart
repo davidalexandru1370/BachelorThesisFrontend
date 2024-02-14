@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:frontend/domain/constants/api_constants.dart';
 
-import '../domain/models/entities/document.dart';
+import '../../domain/models/entities/document.dart';
 import 'package:http/http.dart' as http;
 
-import '../domain/models/response/error_details.dart';
+import '../../domain/models/response/error_details.dart';
 
 class DocumentService {
   final String _controller = "document";
@@ -31,7 +31,7 @@ class DocumentService {
       return assignments;
     } else {
       var body = response.body;
-      var errorDetails = ErrorDetails.fromJson(jsonDecode(body));
+      var errorDetails = ErrorDetails.fromMap(jsonDecode(body));
 
       throw Exception(errorDetails.message);
     }

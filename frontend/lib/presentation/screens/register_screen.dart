@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import '../../application/services/user_service.dart';
 import '../../domain/models/entities/auth_result.dart';
 import '../../domain/models/entities/user_credentials.dart';
-import '../../services/user_service.dart';
 import '../widgets/login_with_facebook_button.dart';
 import '../widgets/login_with_google_button.dart';
 import 'login_screen.dart';
@@ -233,7 +233,11 @@ class _RegisterForm extends State<RegisterScreen> {
                         Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            LoginWithGoogleButton(),
+                            LoginWithGoogleButton(
+                              afterLoginContinuation: (String token) async {
+                                UserService.registerWithGoogle(token);
+                              },
+                            ),
                             const Padding(padding: EdgeInsets.all(10)),
                             LoginWithFacebookButton()
                           ],

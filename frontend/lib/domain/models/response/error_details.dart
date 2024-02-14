@@ -4,10 +4,10 @@ class ErrorDetails {
 
   ErrorDetails({required this.message, required this.code});
 
-  factory ErrorDetails.fromJson(Map<String, dynamic> json) {
+  factory ErrorDetails.fromMap(Map<String, dynamic> map) {
     return ErrorDetails(
-      message: json['message'],
-      code: json['code'],
+      message: map['message'],
+      code: map['code'],
     );
   }
 
