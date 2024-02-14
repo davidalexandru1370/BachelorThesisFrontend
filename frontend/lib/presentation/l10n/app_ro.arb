@@ -16,5 +16,24 @@
   "gallery": "Galerie",
   "addImage": "Adauga imagine",
   "loginWithGoogle": "Conecteaza-te cu Google",
-  "errorLoginWithGoogle": "Eroare la conectare cu Google"
+  "errorLoginWithGoogle": "Eroare la conectare cu Google",
+  "connectNow": "Conecteaza-te",
+  "alreadyHaveAccount": "Ai deja un ",
+  "account": "Cont",
+  "enterEmail": "Introdu adresa de email",
+  "enterPassword": "Introdu parola",
+  "emailIsNotValid": "Adresa de email nu este valida",
+  "passwordMustBeAtLeast": "Parola trebuie sa aiba cel putin {count} caractere",
+  "@passwordMustBeAtLeast": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "email": "Email",
+  "password": "Parola",
+  "backend_error_1": "Adresa de email nu exista",
+  "backend_error_2": "Adresa de email sau parola incorecta",
+  "backend_error_3": "Nu exista",
+  "backend_error_4": "",
+  "backend_error_5": "Adresa de email exista deja"
 }

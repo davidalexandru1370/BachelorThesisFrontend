@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:frontend/presentation/widgets/notifications/toast_notification.dart';
 
 import '../../application/services/user_service.dart';
 import '../../domain/models/entities/auth_result.dart';
 import '../../domain/models/entities/user_credentials.dart';
+import '../l10n/app_l10n.dart';
 import '../widgets/login_with_facebook_button.dart';
 import '../widgets/login_with_google_button.dart';
 import 'login_screen.dart';
@@ -26,6 +27,7 @@ class _RegisterForm extends State<RegisterScreen> {
   final _passwordController = TextEditingController();
   final _storage = const FlutterSecureStorage();
 
+  bool _isLoading = false;
   bool _isFormValid = false;
 
   bool _areAllFieldsValid() {
@@ -51,6 +53,7 @@ class _RegisterForm extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var _localization = getAppLocalizations(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Column(
@@ -62,18 +65,18 @@ class _RegisterForm extends State<RegisterScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const Row(
+                  Row(
                     children: [
                       Text(
-                        "Already having an ",
-                        style: TextStyle(
+                        "${_localization!.alreadyHaveAccount} ",
+                        style: const TextStyle(
                             fontFamily: "PTSansNarrow",
                             fontSize: 30,
                             color: Color.fromARGB(255, 43, 43, 43)),
                       ),
                       Text(
-                        "account?",
-                        style: TextStyle(
+                        "${_localization!.account}?",
+                        style: const TextStyle(
                           fontFamily: "PTSansNarrow",
                           fontSize: 30,
                           color: Color.fromARGB(255, 39, 33, 234),
@@ -90,9 +93,9 @@ class _RegisterForm extends State<RegisterScreen> {
                               MaterialPageRoute(
                                   builder: (context) => const LoginScreen()));
                         },
-                        child: const Text("Connect now",
+                        child: Text(_localization!.connectNow,
                             textAlign: TextAlign.left,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontFamily: "BricolageGrotesque",
                                 fontSize: 20,
                                 color: Color.fromARGB(255, 43, 43, 43))),
@@ -115,10 +118,10 @@ class _RegisterForm extends State<RegisterScreen> {
                             child: TextFormField(
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return "Please enter your email";
+                                  return _localization.enterEmail;
                                 }
                                 if (!_isEmailValid(value)) {
-                                  return "Email is not valid";
+                                  return _localization.emailIsNotValid;
                                 }
                                 return null;
                               },
@@ -126,10 +129,10 @@ class _RegisterForm extends State<RegisterScreen> {
                               onChanged: (value) {
                                 _areAllFieldsValid();
                               },
-                              decoration: const InputDecoration(
-                                suffixIcon: Icon(Icons.email),
-                                labelText: "Email",
-                                labelStyle: TextStyle(
+                              decoration: InputDecoration(
+                                suffixIcon: const Icon(Icons.email),
+                                labelText: _localization!.email,
+                                labelStyle: const TextStyle(
                                     color: Color.fromARGB(255, 43, 43, 43)),
                               ),
                             )),
@@ -138,11 +141,13 @@ class _RegisterForm extends State<RegisterScreen> {
                             widthFactor: 0.9,
                             child: TextFormField(
                               validator: (value) {
+                                const int minPasswordLength = 5;
                                 if (value == null || value.isEmpty) {
-                                  return "Please enter your password";
+                                  return _localization.enterPassword;
                                 }
-                                if (value.length < 5) {
-                                  return "Password must be at least 5 characters long";
+                                if (value.length < minPasswordLength) {
+                                  return _localization
+                                      .passwordMustBeAtLeast(minPasswordLength);
                                 }
                                 return null;
                               },
@@ -151,14 +156,14 @@ class _RegisterForm extends State<RegisterScreen> {
                               onChanged: (value) {
                                 _areAllFieldsValid();
                               },
-                              decoration: const InputDecoration(
-                                suffixIcon: Icon(Icons.lock),
-                                border: UnderlineInputBorder(
+                              decoration: InputDecoration(
+                                suffixIcon: const Icon(Icons.lock),
+                                border: const UnderlineInputBorder(
                                     borderSide: BorderSide(
                                         color: Color.fromARGB(
                                             255, 212, 212, 212))),
-                                labelText: "Password",
-                                labelStyle: TextStyle(
+                                labelText: _localization!.password,
+                                labelStyle: const TextStyle(
                                   color: Color.fromARGB(255, 43, 43, 43),
                                 ),
                               ),
@@ -179,6 +184,12 @@ class _RegisterForm extends State<RegisterScreen> {
                             child: ElevatedButton(
                                 onPressed: _areAllFieldsValid() == true
                                     ? () {
+                                        if (_isLoading == true) {
+                                          return;
+                                        }
+                                        setState(() {
+                                          _isLoading = true;
+                                        });
                                         UserService.register(UserCredentials(
                                                 email: _emailController.text,
                                                 password:
@@ -205,6 +216,9 @@ class _RegisterForm extends State<RegisterScreen> {
                                               .showSnackBar(SnackBar(
                                                   content: Text(
                                                       error.error.toString())));
+                                          setState(() {
+                                            _isLoading = false;
+                                          });
                                           return new Future.value();
                                         },
                                                 test: (error) =>
@@ -219,11 +233,13 @@ class _RegisterForm extends State<RegisterScreen> {
                                   backgroundColor: Colors.transparent,
                                 ),
                                 child: _isFormValid == true
-                                    ? const Icon(
-                                        color: Colors.white,
-                                        Icons.arrow_right_alt_rounded,
-                                        size: 40,
-                                      )
+                                    ? _isLoading == true
+                                        ? const CircularProgressIndicator()
+                                        : const Icon(
+                                            color: Colors.white,
+                                            Icons.arrow_right_alt_rounded,
+                                            size: 40,
+                                          )
                                     : const Icon(
                                         color: Color.fromARGB(255, 73, 73, 73),
                                         Icons.arrow_right_alt_rounded,
@@ -235,11 +251,17 @@ class _RegisterForm extends State<RegisterScreen> {
                           children: [
                             LoginWithGoogleButton(
                               afterLoginContinuation: (String token) async {
-                                UserService.registerWithGoogle(token);
+                                try {
+                                  await UserService.registerWithGoogle(token);
+                                } catch (e) {
+                                  ToastNotification.showError(
+                                      context,
+                                      (await translateErrorCodes(
+                                          context, e.toString()))!);
+                                }
                               },
                             ),
                             const Padding(padding: EdgeInsets.all(10)),
-                            LoginWithFacebookButton()
                           ],
                         ),
                       ]),

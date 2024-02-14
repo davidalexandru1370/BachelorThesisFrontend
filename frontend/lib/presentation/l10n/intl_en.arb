@@ -25,5 +25,24 @@
   "gallery": "Gallery",
   "addImage": "Add image",
   "loginWithGoogle": "Login with Google",
-  "errorLoginWithGoogle": "Error logging with Google"
+  "errorLoginWithGoogle": "Error logging with Google",
+  "connectNow": "Connect now",
+  "alreadyHaveAccount": "Already having an",
+  "account": "Account",
+  "enterEmail": "Please, enter your email",
+  "enterPassword": "Please, enter your password",
+  "emailIsNotValid": "Email is not valid",
+  "passwordMustBeAtLeast": "Password must be at least {count}",
+  "@passwordMustBeAtLeast": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "email": "Email",
+  "password": "Password",
+  "backend_error_1": "Email address does not exist",
+  "backend_error_2": "Email address or password is incorrect",
+  "backend_error_3": "Does not exists",
+  "backend_error_4": "Duplicate entry",
+  "backend_error_5": "Email address already exists"
 }
