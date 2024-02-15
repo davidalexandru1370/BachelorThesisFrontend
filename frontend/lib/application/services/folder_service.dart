@@ -18,7 +18,7 @@ class FolderService {
 
   FolderService() {
     if (_secureStorage.containsKey(key: AppConstants.TOKEN) == false) {
-      throw UnauthenticatedException('Token not found');
+      throw UnauthenticatedException('Unauthorized');
     }
   }
 

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:frontend/domain/constants/app_constants.dart';
 import 'package:frontend/presentation/extensions/exception_extensions.dart';
 import 'package:frontend/presentation/widgets/notifications/toast_notification.dart';
 
+import '../../application/secure_storage/secure_storage.dart';
 import '../../application/services/user_service.dart';
-import '../../domain/models/entities/auth_result.dart';
 import '../../domain/models/entities/user_credentials.dart';
 import '../l10n/app_l10n.dart';
-import '../widgets/login_with_facebook_button.dart';
 import '../widgets/login_with_google_button.dart';
 import 'login_screen.dart';
+import 'main_page.dart';
 
 class RegisterScreen extends StatefulWidget {
   static const String id = 'register_screen';
@@ -26,7 +26,7 @@ class _RegisterForm extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _storage = const FlutterSecureStorage();
+  final _storage = SecureStorage();
   final _localization = Localization();
   bool _isLoading = false;
   bool _isFormValid = false;
@@ -184,46 +184,35 @@ class _RegisterForm extends State<RegisterScreen> {
                                       ])),
                             child: ElevatedButton(
                                 onPressed: _areAllFieldsValid() == true
-                                    ? () {
+                                    ? () async {
                                         if (_isLoading == true) {
                                           return;
                                         }
                                         setState(() {
                                           _isLoading = true;
                                         });
-                                        UserService.register(UserCredentials(
-                                                email: _emailController.text,
-                                                password:
-                                                    _passwordController.text))
-                                            .then((value) => {
-                                                  if (value.result == true)
-                                                    {
-                                                      _storage.write(
-                                                          key: "token",
-                                                          value: value.token),
-                                                    }
-                                                  else
-                                                    {
-                                                      ScaffoldMessenger.of(
-                                                              context)
-                                                          .showSnackBar(SnackBar(
-                                                              content: Text(
-                                                                  value.error)))
-                                                    }
-                                                })
-                                            .onError(
-                                                (AuthResult error, stackTrace) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
-                                                  content: Text(
-                                                      error.error.toString())));
+                                        try {
+                                          var authResult = await UserService
+                                              .register(UserCredentials(
+                                                  email: _emailController.text,
+                                                  password: _passwordController
+                                                      .text));
+                                          if (authResult.result == true) {
+                                            await _afterSuccess(
+                                                authResult.token, context);
+                                          } else {
+                                            throw Exception(authResult.error);
+                                          }
+                                        } on Exception catch (e) {
+                                          ToastNotification.showError(
+                                              context,
+                                              localization
+                                                  .backend_error(e.getMessage));
+                                        } finally {
                                           setState(() {
                                             _isLoading = false;
                                           });
-                                          return new Future.value();
-                                        },
-                                                test: (error) =>
-                                                    error is AuthResult);
+                                        }
                                       }
                                     : null,
                                 style: ElevatedButton.styleFrom(
@@ -254,6 +243,7 @@ class _RegisterForm extends State<RegisterScreen> {
                               afterLoginContinuation: (String token) async {
                                 try {
                                   await UserService.registerWithGoogle(token);
+                                  await _afterSuccess(token, context);
                                 } on Exception catch (e) {
                                   ToastNotification.showError(context,
                                       localization.backend_error(e.getMessage));
@@ -266,6 +256,15 @@ class _RegisterForm extends State<RegisterScreen> {
                       ]),
                 )),
           ]),
+    );
+  }
+
+  Future<void> _afterSuccess(String token, BuildContext context) async {
+    await _storage.insert(AppConstants.TOKEN, token);
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => MainPage(),
+      ),
     );
   }
 }

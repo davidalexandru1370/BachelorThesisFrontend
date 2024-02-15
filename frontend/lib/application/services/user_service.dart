@@ -11,6 +11,7 @@ class UserService {
   static final Logger _logger = Logger();
 
   static Future<AuthResult> login(UserCredentials userCredentials) async {
+    _logger.log(Level.info, "Logging in user with email and password");
     final response = await http.post(
       Uri.parse('${ApiConstants.BASE_URL}/user/login'),
       headers: <String, String>{
@@ -20,13 +21,18 @@ class UserService {
     );
 
     if (response.statusCode == 200) {
+      _logger.log(Level.info, "User logged in successfully");
       return AuthResult.fromJson(jsonDecode(response.body));
     } else {
-      throw AuthResult("", "Failed to login", false);
+      var errorDetails = ErrorDetails.fromMap(jsonDecode(response.body));
+      var message = errorDetails.message;
+      _logger.log(Level.error, errorDetails);
+      throw Exception(message);
     }
   }
 
   static Future<AuthResult> register(UserCredentials userCredentials) async {
+    _logger.log(Level.info, "Registering user with email and password");
     final response = await http.post(
       Uri.parse('${ApiConstants.BASE_URL}/user/register'),
       headers: <String, String>{
@@ -36,9 +42,13 @@ class UserService {
     );
 
     if (response.statusCode == 200) {
+      _logger.log(Level.info, "User registered successfully");
       return AuthResult.fromJson(jsonDecode(response.body));
     } else {
-      throw AuthResult("", "Failed to register", false);
+      var errorDetails = ErrorDetails.fromMap(jsonDecode(response.body));
+      var message = errorDetails.message;
+      _logger.log(Level.error, errorDetails);
+      throw Exception(message);
     }
   }
 
@@ -52,7 +62,7 @@ class UserService {
       },
     );
 
-    if (response.statusCode != 200 ) {
+    if (response.statusCode != 200) {
       var body = jsonDecode(response.body);
       var errorDetails = ErrorDetails.fromMap(body);
       _logger.log(Level.error, errorDetails.toString());

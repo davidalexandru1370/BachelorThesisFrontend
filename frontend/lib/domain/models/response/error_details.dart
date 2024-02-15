@@ -18,6 +18,6 @@ class ErrorDetails {
 
   @override
   String toString() {
-    return 'Error details: \ncode: $code \n message: $message';
+    return 'Error details:\ncode: $code\nmessage: $message';
   }
 }
