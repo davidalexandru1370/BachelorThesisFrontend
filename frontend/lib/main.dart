@@ -1,24 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/application/secure_storage/secure_storage.dart';
+import 'package:frontend/application/services/user_service.dart';
+import 'package:frontend/domain/constants/app_constants.dart';
+import 'package:frontend/presentation/screens/main_page.dart';
 import 'package:frontend/presentation/screens/register_screen.dart';
+import 'package:frontend/presentation/state/authentication_state.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() {
   ensureCameraWorks();
 
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
 
   @override
   State<StatefulWidget> createState() => _MyApp();
 }
 
 class _MyApp extends State<MyApp> {
+  final _storage = SecureStorage();
+  bool _waiting = true;
+  Widget _nextScreen = const RegisterScreen();
+
+  @override
+  void initState() {
+    _checkIfLoggedIn();
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (_waiting == true) {
+      return const SizedBox(
+        height: double.infinity,
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          CircularProgressIndicator(),
+        ]),
+      );
+    }
+
     return ChangeNotifierProvider(
         create: (context) => LocaleModel(),
         child: Consumer<LocaleModel>(
@@ -32,7 +55,21 @@ class _MyApp extends State<MyApp> {
                 supportedLocales: AppLocalizations.supportedLocales,
                 locale: localeModel.locale,
                 localizationsDelegates: AppLocalizations.localizationsDelegates,
-                home: const RegisterScreen())));
+                home: _nextScreen)));
+  }
+
+  Future<void> _checkIfLoggedIn() async {
+    if ((await _storage.contains(AppConstants.TOKEN)) == false) {
+      setState(() {
+        _waiting = false;
+      });
+      return;
+    }
+
+    setState(() {
+      _waiting = false;
+      _nextScreen = MainPage();
+    });
   }
 }
 

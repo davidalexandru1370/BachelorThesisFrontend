@@ -1,0 +1,4 @@
+enum AuthenticationType {
+  emailAndPassword,
+  google
+}

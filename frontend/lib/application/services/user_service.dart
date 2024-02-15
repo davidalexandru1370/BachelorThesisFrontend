@@ -5,6 +5,7 @@ import 'package:logger/logger.dart';
 import '../../domain/constants/api_constants.dart';
 import '../../domain/models/entities/auth_result.dart';
 import '../../domain/models/entities/user_credentials.dart';
+import '../../domain/models/entities/user_profile.dart';
 import '../../domain/models/response/error_details.dart';
 
 class UserService {
@@ -70,5 +71,27 @@ class UserService {
     }
 
     _logger.log(Level.info, "Registered with google successfully");
+  }
+
+  static Future<UserProfile> getUserProfile(String token) async {
+    _logger.log(Level.info, "Getting user profile");
+
+    final response = await http.get(
+      Uri.parse('${ApiConstants.BASE_URL}/user/profile'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token'
+      },
+    );
+
+    if (response.statusCode != 200) {
+      var errorDetails = ErrorDetails.fromMap(jsonDecode(response.body));
+      var message = errorDetails.message;
+      _logger.log(Level.error, errorDetails);
+      throw Exception(message);
+    }
+
+    _logger.log(Level.info, "Got user profile successfully");
+    return UserProfile.fromMap(jsonDecode(response.body));
   }
 }

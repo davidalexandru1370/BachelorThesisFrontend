@@ -13,7 +13,7 @@ class SecureStorage {
   SecureStorage._internal();
 
   Future<String?> read(String key) async {
-    return _flutterSecureStorage.read(key: key);
+    return await _flutterSecureStorage.read(key: key);
   }
 
   Future<String> insert(String key, String value) async {
@@ -29,7 +29,7 @@ class SecureStorage {
     await _flutterSecureStorage.deleteAll();
   }
 
-  Future<bool> exists(String key) async {
+  Future<bool> contains(String key) async {
     return await _flutterSecureStorage.containsKey(key: key);
   }
 }
