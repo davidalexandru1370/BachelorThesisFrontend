@@ -40,9 +40,10 @@
   },
   "email": "Email",
   "password": "Password",
-  "backend_error_1": "Email address does not exist",
-  "backend_error_2": "Email address or password is incorrect",
-  "backend_error_3": "Does not exists",
-  "backend_error_4": "Duplicate entry",
-  "backend_error_5": "Email address already exists"
+  "backend_error": "{error_code, select, 1 {Email address does not exist} 2 {Email address or password are incorrect} 3 {Not found} 4 {} 5 {Email Address already exists} other {Server error}}",
+  "@backend_error": {
+    "placeholders": {
+      "error_code": {}
+    }
+  }
 }

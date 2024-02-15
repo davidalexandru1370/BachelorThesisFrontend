@@ -26,10 +26,11 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
   String _dropdownValue = "";
   final ImagePicker _imagePicker = ImagePicker();
   final FolderService _folderService = FolderService();
+  var _localization = Localization();
 
   @override
   Widget build(BuildContext context) {
-    var localization = getAppLocalizations(context);
+    var localization = _localization.getAppLocalizations(context);
     if (_dropdownValue == "") {
       _dropdownValue = localization!.carFromAnotherCountry;
     }

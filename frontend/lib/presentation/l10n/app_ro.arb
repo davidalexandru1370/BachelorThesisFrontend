@@ -31,9 +31,10 @@
   },
   "email": "Email",
   "password": "Parola",
-  "backend_error_1": "Adresa de email nu exista",
-  "backend_error_2": "Adresa de email sau parola incorecta",
-  "backend_error_3": "Nu exista",
-  "backend_error_4": "",
-  "backend_error_5": "Adresa de email exista deja"
+  "backend_error": "{error_code, select, 1 {Adresa de email nu exista} 2 {Adresa de email sau parola incorecta} 3 {Nu exista} 4 {} 5 {Adresa de email exista deja} other {Eroare la server}}",
+  "@backend_error": {
+    "placeholders": {
+      "error_code": {}
+    }
+  }
 }

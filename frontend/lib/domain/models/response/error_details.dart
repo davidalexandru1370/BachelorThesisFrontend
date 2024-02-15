@@ -1,13 +1,13 @@
 class ErrorDetails {
   final String message;
-  final String code;
+  final int code;
 
   ErrorDetails({required this.message, required this.code});
 
   factory ErrorDetails.fromMap(Map<String, dynamic> map) {
     return ErrorDetails(
-      message: map['message'],
-      code: map['code'],
+      message: map['detail'],
+      code: map['status'],
     );
   }
 

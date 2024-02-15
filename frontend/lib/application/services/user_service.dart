@@ -52,7 +52,7 @@ class UserService {
       },
     );
 
-    if (response.statusCode != 200 && response.statusCode != 202) {
+    if (response.statusCode != 200 ) {
       var body = jsonDecode(response.body);
       var errorDetails = ErrorDetails.fromMap(body);
       _logger.log(Level.error, errorDetails.toString());

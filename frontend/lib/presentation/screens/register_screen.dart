@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:frontend/presentation/extensions/exception_extensions.dart';
 import 'package:frontend/presentation/widgets/notifications/toast_notification.dart';
 
 import '../../application/services/user_service.dart';
@@ -26,7 +27,7 @@ class _RegisterForm extends State<RegisterScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _storage = const FlutterSecureStorage();
-
+  final _localization = Localization();
   bool _isLoading = false;
   bool _isFormValid = false;
 
@@ -53,7 +54,7 @@ class _RegisterForm extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var _localization = getAppLocalizations(context);
+    var localization = _localization.getAppLocalizations(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Column(
@@ -68,14 +69,14 @@ class _RegisterForm extends State<RegisterScreen> {
                   Row(
                     children: [
                       Text(
-                        "${_localization!.alreadyHaveAccount} ",
+                        "${localization!.alreadyHaveAccount} ",
                         style: const TextStyle(
                             fontFamily: "PTSansNarrow",
                             fontSize: 30,
                             color: Color.fromARGB(255, 43, 43, 43)),
                       ),
                       Text(
-                        "${_localization!.account}?",
+                        "${localization!.account}?",
                         style: const TextStyle(
                           fontFamily: "PTSansNarrow",
                           fontSize: 30,
@@ -93,7 +94,7 @@ class _RegisterForm extends State<RegisterScreen> {
                               MaterialPageRoute(
                                   builder: (context) => const LoginScreen()));
                         },
-                        child: Text(_localization!.connectNow,
+                        child: Text(localization!.connectNow,
                             textAlign: TextAlign.left,
                             style: const TextStyle(
                                 fontFamily: "BricolageGrotesque",
@@ -118,10 +119,10 @@ class _RegisterForm extends State<RegisterScreen> {
                             child: TextFormField(
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return _localization.enterEmail;
+                                  return localization.enterEmail;
                                 }
                                 if (!_isEmailValid(value)) {
-                                  return _localization.emailIsNotValid;
+                                  return localization.emailIsNotValid;
                                 }
                                 return null;
                               },
@@ -131,7 +132,7 @@ class _RegisterForm extends State<RegisterScreen> {
                               },
                               decoration: InputDecoration(
                                 suffixIcon: const Icon(Icons.email),
-                                labelText: _localization!.email,
+                                labelText: localization!.email,
                                 labelStyle: const TextStyle(
                                     color: Color.fromARGB(255, 43, 43, 43)),
                               ),
@@ -143,10 +144,10 @@ class _RegisterForm extends State<RegisterScreen> {
                               validator: (value) {
                                 const int minPasswordLength = 5;
                                 if (value == null || value.isEmpty) {
-                                  return _localization.enterPassword;
+                                  return localization.enterPassword;
                                 }
                                 if (value.length < minPasswordLength) {
-                                  return _localization
+                                  return localization
                                       .passwordMustBeAtLeast(minPasswordLength);
                                 }
                                 return null;
@@ -162,7 +163,7 @@ class _RegisterForm extends State<RegisterScreen> {
                                     borderSide: BorderSide(
                                         color: Color.fromARGB(
                                             255, 212, 212, 212))),
-                                labelText: _localization!.password,
+                                labelText: localization!.password,
                                 labelStyle: const TextStyle(
                                   color: Color.fromARGB(255, 43, 43, 43),
                                 ),
@@ -253,11 +254,9 @@ class _RegisterForm extends State<RegisterScreen> {
                               afterLoginContinuation: (String token) async {
                                 try {
                                   await UserService.registerWithGoogle(token);
-                                } catch (e) {
-                                  ToastNotification.showError(
-                                      context,
-                                      (await translateErrorCodes(
-                                          context, e.toString()))!);
+                                } on Exception catch (e) {
+                                  ToastNotification.showError(context,
+                                      localization.backend_error(e.getMessage));
                                 }
                               },
                             ),

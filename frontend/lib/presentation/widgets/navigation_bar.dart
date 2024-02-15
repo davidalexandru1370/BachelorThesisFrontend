@@ -13,10 +13,11 @@ class ApplicationNavigationBar extends StatefulWidget {
 
 class _ApplicationNavigationBarState extends State<ApplicationNavigationBar> {
   int _currentPageIndex = 0;
+  final _localization = Localization();
 
   @override
   Widget build(BuildContext context) {
-    var localization = getAppLocalizations(context);
+    var localization = _localization.getAppLocalizations(context);
 
     return Scaffold(
       bottomNavigationBar: NavigationBar(

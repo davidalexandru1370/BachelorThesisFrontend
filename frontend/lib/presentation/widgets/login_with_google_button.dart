@@ -11,13 +11,13 @@ import 'button.dart';
 class LoginWithGoogleButton extends StatelessWidget {
   final Function? afterLoginContinuation;
   final Logger _logger = Logger();
-
+  final _localization = Localization();
   LoginWithGoogleButton({Key? key, this.afterLoginContinuation = null})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var localizations = getAppLocalizations(context);
+    var localizations = _localization.getAppLocalizations(context);
 
     return Button(
         text: localizations!.loginWithGoogle,

@@ -186,7 +186,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                     : 'en'));
                                           },
                                           child: Text(
-                                            getAppLocalizations(context)!
+                                            Localization().getAppLocalizations(context)!
                                                 .forgotPassword,
                                             textAlign: TextAlign.right,
                                           ),

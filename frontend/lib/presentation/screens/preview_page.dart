@@ -10,8 +10,9 @@ class PreviewPage extends StatelessWidget {
   final double buttonHeight = 60;
   final Function onClose;
   final Function onSend;
+  final _localization = Localization();
 
-  const PreviewPage(
+  PreviewPage(
       {Key? key,
       required this.picture,
       required this.onClose,
@@ -45,8 +46,9 @@ class PreviewPage extends StatelessWidget {
                               },
                               style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.red),
-                              child: Text(
-                                  getAppLocalizations(context)!.retakePhoto)),
+                              child: Text(_localization
+                                  .getAppLocalizations(context)!
+                                  .retakePhoto)),
                         ),
                         Container(
                           height: buttonHeight,
@@ -54,8 +56,9 @@ class PreviewPage extends StatelessWidget {
                               onPressed: () {
                                 onSend();
                               },
-                              child: Text(
-                                  getAppLocalizations(context)!.uploadPhoto)),
+                              child: Text(_localization
+                                  .getAppLocalizations(context)!
+                                  .uploadPhoto)),
                         ),
                       ])
                 ],
