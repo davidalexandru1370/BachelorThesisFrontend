@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
 
+import '../../application/secure_storage/secure_storage.dart';
+import '../../application/services/user_service.dart';
+import '../../domain/constants/app_constants.dart';
 import '../l10n/app_l10n.dart';
+import '../providers/authentication_state.dart';
 import '../screens/main_page.dart';
 import '../screens/new_folder_screen.dart';
+import '../screens/register_screen.dart';
 
 class ApplicationNavigationBar extends StatefulWidget {
   const ApplicationNavigationBar({Key? key}) : super(key: key);
@@ -14,10 +21,24 @@ class ApplicationNavigationBar extends StatefulWidget {
 class _ApplicationNavigationBarState extends State<ApplicationNavigationBar> {
   int _currentPageIndex = 0;
   final _localization = Localization();
+  final SecureStorage _storage = SecureStorage();
+  bool _loading = true;
+  final Logger _logger = Logger();
+
+  @override
+  void initState() {
+    _getUserProfile();
+  }
 
   @override
   Widget build(BuildContext context) {
     var localization = _localization.getAppLocalizations(context);
+
+    if (_loading == true) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
 
     return Scaffold(
       bottomNavigationBar: NavigationBar(
@@ -58,5 +79,24 @@ class _ApplicationNavigationBarState extends State<ApplicationNavigationBar> {
         MainPage(),
       ][_currentPageIndex],
     );
+  }
+
+  Future<void> _getUserProfile() async {
+    await Future.delayed(const Duration(seconds: 0));
+
+    final token = await _storage.read(AppConstants.TOKEN);
+    final authenticationProvider = context.read<AuthenticationProvider>();
+    try {
+      var userProfile = await UserService.getUserProfile(token!);
+      authenticationProvider.setUserProfile(userProfile);
+      setState(() {
+        _loading = false;
+      });
+    } on Exception catch (e) {
+      _logger.log(Level.error, e);
+      await _storage.delete(AppConstants.TOKEN);
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => const RegisterScreen()));
+    }
   }
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/domain/constants/app_constants.dart';
 import 'package:frontend/presentation/extensions/exception_extensions.dart';
+import 'package:frontend/presentation/providers/authentication_state.dart';
 import 'package:frontend/presentation/widgets/notifications/toast_notification.dart';
+import 'package:provider/provider.dart';
 
 import '../../application/secure_storage/secure_storage.dart';
 import '../../application/services/user_service.dart';
@@ -69,7 +71,7 @@ class _RegisterForm extends State<RegisterScreen> {
                   Row(
                     children: [
                       Text(
-                        "${localization!.alreadyHaveAccount} ",
+                        "${localization!.alreadyHaveAccount}",
                         style: const TextStyle(
                             fontFamily: "PTSansNarrow",
                             fontSize: 30,

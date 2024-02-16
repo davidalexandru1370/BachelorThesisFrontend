@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:frontend/domain/models/entities/user_profile.dart';
 
-class AuthenticationState with ChangeNotifier, DiagnosticableTreeMixin {
+class AuthenticationProvider with ChangeNotifier, DiagnosticableTreeMixin {
   late UserProfile _userProfile;
 
   UserProfile get userProfile => _userProfile;

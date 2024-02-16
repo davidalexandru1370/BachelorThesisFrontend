@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/application/secure_storage/secure_storage.dart';
-import 'package:frontend/application/services/user_service.dart';
 import 'package:frontend/domain/constants/app_constants.dart';
+import 'package:frontend/presentation/providers/authentication_state.dart';
 import 'package:frontend/presentation/screens/main_page.dart';
 import 'package:frontend/presentation/screens/register_screen.dart';
-import 'package:frontend/presentation/state/authentication_state.dart';
+import 'package:frontend/presentation/widgets/navigation_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -41,9 +41,11 @@ class _MyApp extends State<MyApp> {
         ]),
       );
     }
-
-    return ChangeNotifierProvider(
-        create: (context) => LocaleModel(),
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => AuthenticationProvider()),
+          ChangeNotifierProvider(create: (context) => LocaleModel())
+        ],
         child: Consumer<LocaleModel>(
             builder: (context, localeModel, child) => MaterialApp(
                 title: 'SDIA',
@@ -68,7 +70,7 @@ class _MyApp extends State<MyApp> {
 
     setState(() {
       _waiting = false;
-      _nextScreen = MainPage();
+      _nextScreen = const ApplicationNavigationBar();
     });
   }
 }
