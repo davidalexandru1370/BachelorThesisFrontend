@@ -1,11 +1,13 @@
 import 'dart:convert';
 
 import 'package:frontend/domain/constants/api_constants.dart';
+import 'package:frontend/domain/exceptions/application_exception.dart';
 
 import '../../domain/models/entities/document.dart';
 import 'package:http/http.dart' as http;
 
-import '../../domain/models/response/error_details.dart';
+import '../../domain/models/entities/error_details.dart';
+
 
 class DocumentService {
   final String _controller = "document";
@@ -33,7 +35,7 @@ class DocumentService {
       var body = response.body;
       var errorDetails = ErrorDetails.fromMap(jsonDecode(body));
 
-      throw Exception(errorDetails.message);
+      throw ApplicationException(errorDetails.message);
     }
   }
 

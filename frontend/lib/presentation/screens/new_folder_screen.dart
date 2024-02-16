@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/domain/models/request/create_document.dart';
-import 'package:frontend/domain/models/request/create_folder.dart';
+import 'package:frontend/domain/models/entities/request/create_document.dart';
+import 'package:frontend/domain/models/entities/request/create_folder.dart';
 import 'package:frontend/presentation/screens/camera_screen.dart';
 import 'package:image_picker/image_picker.dart';
 

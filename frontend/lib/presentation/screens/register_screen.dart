@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/domain/constants/app_constants.dart';
+import 'package:frontend/domain/exceptions/application_exception.dart';
 import 'package:frontend/presentation/extensions/exception_extensions.dart';
-import 'package:frontend/presentation/providers/authentication_state.dart';
+import 'package:frontend/presentation/widgets/navigation_bar.dart';
 import 'package:frontend/presentation/widgets/notifications/toast_notification.dart';
-import 'package:provider/provider.dart';
 
 import '../../application/secure_storage/secure_storage.dart';
 import '../../application/services/user_service.dart';
@@ -11,7 +11,6 @@ import '../../domain/models/entities/user_credentials.dart';
 import '../l10n/app_l10n.dart';
 import '../widgets/login_with_google_button.dart';
 import 'login_screen.dart';
-import 'main_page.dart';
 
 class RegisterScreen extends StatefulWidget {
   static const String id = 'register_screen';
@@ -199,13 +198,9 @@ class _RegisterForm extends State<RegisterScreen> {
                                                   email: _emailController.text,
                                                   password: _passwordController
                                                       .text));
-                                          if (authResult.result == true) {
-                                            await _afterSuccess(
-                                                authResult.token, context);
-                                          } else {
-                                            throw Exception(authResult.error);
-                                          }
-                                        } on Exception catch (e) {
+                                          await _afterSuccess(
+                                              authResult.token, context);
+                                        } on ApplicationException catch (e) {
                                           ToastNotification.showError(
                                               context,
                                               localization
@@ -246,7 +241,7 @@ class _RegisterForm extends State<RegisterScreen> {
                                 try {
                                   await UserService.registerWithGoogle(token);
                                   await _afterSuccess(token, context);
-                                } on Exception catch (e) {
+                                } on ApplicationException catch (e) {
                                   ToastNotification.showError(context,
                                       localization.backend_error(e.getMessage));
                                 }
@@ -265,7 +260,7 @@ class _RegisterForm extends State<RegisterScreen> {
     await _storage.insert(AppConstants.TOKEN, token);
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (context) => MainPage(),
+        builder: (context) => const ApplicationNavigationBar(),
       ),
     );
   }

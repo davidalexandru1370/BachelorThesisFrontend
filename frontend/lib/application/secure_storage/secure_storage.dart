@@ -6,7 +6,7 @@ class SecureStorage {
 
   static final SecureStorage _secureStorage = SecureStorage._internal();
 
-  factory SecureStorage(){
+  factory SecureStorage() {
     return _secureStorage;
   }
 
@@ -14,6 +14,14 @@ class SecureStorage {
 
   Future<String?> read(String key) async {
     return await _flutterSecureStorage.read(key: key);
+  }
+
+  Future<String> readOrThrow(String key, Exception exception) async {
+    if ((await contains(key)) == false) {
+      throw exception;
+    }
+
+    return (await read(key))!;
   }
 
   Future<String> insert(String key, String value) async {

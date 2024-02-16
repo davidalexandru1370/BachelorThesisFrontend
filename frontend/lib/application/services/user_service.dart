@@ -1,12 +1,14 @@
 import 'dart:convert';
 
+import 'package:frontend/domain/exceptions/application_exception.dart';
+import 'package:frontend/domain/models/entities/document.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 import '../../domain/constants/api_constants.dart';
 import '../../domain/models/entities/auth_result.dart';
+import '../../domain/models/entities/error_details.dart';
 import '../../domain/models/entities/user_credentials.dart';
 import '../../domain/models/entities/user_profile.dart';
-import '../../domain/models/response/error_details.dart';
 
 class UserService {
   static final Logger _logger = Logger();
@@ -28,7 +30,7 @@ class UserService {
       var errorDetails = ErrorDetails.fromMap(jsonDecode(response.body));
       var message = errorDetails.message;
       _logger.log(Level.error, errorDetails);
-      throw Exception(message);
+      throw ApplicationException(message);
     }
   }
 
@@ -49,7 +51,7 @@ class UserService {
       var errorDetails = ErrorDetails.fromMap(jsonDecode(response.body));
       var message = errorDetails.message;
       _logger.log(Level.error, errorDetails);
-      throw Exception(message);
+      throw ApplicationException(message);
     }
   }
 
@@ -67,7 +69,7 @@ class UserService {
       var body = jsonDecode(response.body);
       var errorDetails = ErrorDetails.fromMap(body);
       _logger.log(Level.error, errorDetails.toString());
-      throw Exception(errorDetails.message);
+      throw ApplicationException(errorDetails.message);
     }
 
     _logger.log(Level.info, "Registered with google successfully");
@@ -88,10 +90,34 @@ class UserService {
       var errorDetails = ErrorDetails.fromMap(jsonDecode(response.body));
       var message = errorDetails.message;
       _logger.log(Level.error, errorDetails);
-      throw Exception(message);
+      throw ApplicationException(message);
     }
 
     _logger.log(Level.info, "Got user profile successfully");
     return UserProfile.fromMap(jsonDecode(response.body));
+  }
+
+  static Future<List<Document>> getAllDocuments(String token) async {
+    _logger.log(Level.info, "Getting all documents");
+
+    final response = await http.get(
+      Uri.parse('${ApiConstants.BASE_URL}/document'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token'
+      },
+    );
+
+    if (response.statusCode != 200) {
+      var errorDetails = ErrorDetails.fromMap(jsonDecode(response.body));
+      var message = errorDetails.message;
+      _logger.log(Level.error, errorDetails);
+      throw ApplicationException(message);
+    }
+
+    _logger.log(Level.info, "Got all documents successfully");
+    return (jsonDecode(response.body) as List)
+        .map((e) => Document.fromMap(e))
+        .toList();
   }
 }

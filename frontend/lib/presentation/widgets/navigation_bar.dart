@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/domain/exceptions/unauthenticated_exception.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
@@ -40,48 +41,54 @@ class _ApplicationNavigationBarState extends State<ApplicationNavigationBar> {
         child: CircularProgressIndicator(),
       );
     }
-
-    return Scaffold(
-      bottomNavigationBar: NavigationBar(
-        onDestinationSelected: (int index) {
-          if (index == 1) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const CreateNewFolderScreen()),
-            );
-          } else {
-            setState(() {
-              _currentPageIndex = index;
-            });
-          }
-        },
-        indicatorColor: Colors.amber[800],
-        selectedIndex: _currentPageIndex,
-        destinations: <Widget>[
-          NavigationDestination(
-            icon: const Icon(Icons.home),
-            selectedIcon: const Icon(Icons.home),
-            label: localization!.home,
-          ),
-          NavigationDestination(
-            icon: const Icon(Icons.folder),
-            selectedIcon: const Icon(Icons.folder),
-            label: localization!.submit,
-          ),
-          NavigationDestination(
-            icon: const Icon(Icons.person_outline),
-            selectedIcon: const Icon(Icons.person),
-            label: localization.profile,
-          ),
-        ],
-      ),
-      body: <Widget>[
-        MainPage(),
-        const Placeholder(),
-        const ProfileScreen()
-      ][_currentPageIndex],
-    );
+    try {
+      return Scaffold(
+        bottomNavigationBar: NavigationBar(
+          onDestinationSelected: (int index) {
+            if (index == 1) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const CreateNewFolderScreen()),
+              );
+            } else {
+              setState(() {
+                _currentPageIndex = index;
+              });
+            }
+          },
+          indicatorColor: Colors.amber[800],
+          selectedIndex: _currentPageIndex,
+          destinations: <Widget>[
+            NavigationDestination(
+              icon: const Icon(Icons.home),
+              selectedIcon: const Icon(Icons.home),
+              label: localization!.home,
+            ),
+            NavigationDestination(
+              icon: const Icon(Icons.folder),
+              selectedIcon: const Icon(Icons.folder),
+              label: localization!.submit,
+            ),
+            NavigationDestination(
+              icon: const Icon(Icons.person_outline),
+              selectedIcon: const Icon(Icons.person),
+              label: localization.profile,
+            ),
+          ],
+        ),
+        body: <Widget>[
+          const MainPage(),
+          const Placeholder(),
+          const ProfileScreen()
+        ][_currentPageIndex],
+      );
+    } on UnauthenticatedException catch (e) {
+      _logger.log(Level.error, e);
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => const RegisterScreen()));
+      return const Scaffold();
+    }
   }
 
   Future<void> _getUserProfile() async {

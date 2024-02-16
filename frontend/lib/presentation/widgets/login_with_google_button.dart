@@ -34,7 +34,6 @@ class LoginWithGoogleButton extends StatelessWidget {
             GoogleSignInAccount? account = await googleSignIn.signIn();
 
             if (account == null) {
-              _showError(context, localizations.errorLoginWithGoogle);
               return;
             }
 

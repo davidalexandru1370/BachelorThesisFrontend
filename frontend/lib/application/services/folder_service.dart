@@ -1,31 +1,35 @@
 import 'dart:convert';
 
+import 'package:frontend/application/secure_storage/secure_storage.dart';
+import 'package:frontend/domain/exceptions/application_exception.dart';
+import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/domain/constants/api_constants.dart';
 import 'package:frontend/domain/constants/app_constants.dart';
 import 'package:frontend/domain/exceptions/unauthenticated_exception.dart';
+import 'package:frontend/domain/models/entities/error_details.dart';
+import 'package:frontend/domain/models/entities/request/create_folder.dart';
 import 'package:logger/logger.dart';
 
 import '../../domain/models/entities/folder.dart';
-import '../../domain/models/request/create_folder.dart';
-
 
 class FolderService {
   final String _controller = "folder";
-  var logger = Logger();
-  final _secureStorage = const FlutterSecureStorage();
+  var _logger = Logger();
+  final _secureStorage = SecureStorage();
 
   FolderService() {
-    if (_secureStorage.containsKey(key: AppConstants.TOKEN) == false) {
+    if (_secureStorage.contains(AppConstants.TOKEN) == false) {
       throw UnauthenticatedException('Unauthorized');
     }
   }
 
   Future<Folder> createFolder(CreateFolder folder) async {
-    logger.log(Level.info, 'Creating folder: $folder');
+    _logger.log(Level.info, 'Creating folder: $folder');
     var headers = {
-      'Authorization': 'Bearer ${_secureStorage.read(key: AppConstants.TOKEN)}',
+      'Authorization':
+          'Bearer ${await _secureStorage.read(AppConstants.TOKEN)}',
       'Content-Type': 'multipart/form-data'
     };
 
@@ -37,9 +41,10 @@ class FolderService {
       MapEntry('Documents[0].File', MultipartFile.fromString("")),
     ]);
 
-    for(var i = 0; i < folder.document.length; i++){
+    for (var i = 0; i < folder.document.length; i++) {
       data.files.addAll([
-        MapEntry('Documents[$i].File', await MultipartFile.fromFile(folder.document[i].image.path)),
+        MapEntry('Documents[$i].File',
+            await MultipartFile.fromFile(folder.document[i].image.path)),
       ]);
     }
 
@@ -54,12 +59,48 @@ class FolderService {
     );
 
     if (response.statusCode == 200) {
-      logger.log(Level.info, 'Folder created successfully');
+      _logger.log(Level.info, 'Folder created successfully');
     } else {
-      logger.log(Level.error, response.statusMessage);
+      _logger.log(Level.error, 'Error creating folder');
+      if (response.statusCode == 401) {
+        throw UnauthenticatedException('Unauthorized');
+      } else {
+        var errorDetails = ErrorDetails.fromMap(jsonDecode(response.data));
+        _logger.log(Level.error, errorDetails);
+        throw ApplicationException(errorDetails.message);
+      }
     }
 
     return Folder.fromMap(jsonDecode(response.data));
+  }
 
+  Future<List<Folder>> getAllFolders(String token) async {
+    _logger.log(Level.info, 'Getting all folders for current user');
+    var response = await http.get(Uri.parse('${ApiConstants.BASE_URL}/folder'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token'
+        });
+
+    if (response.statusCode == 200) {
+      _logger.log(Level.info, 'Got all folders successfully');
+      return (jsonDecode(response.body) as List)
+          .map((e) => Folder.fromMap(e))
+          .toList();
+    } else {
+      _logger.log(Level.error, "Error getting all folders");
+      _handleError(response);
+      throw UnauthenticatedException("");
+    }
+  }
+
+  void _handleError(http.Response response) {
+    if (response.statusCode == 401) {
+      throw UnauthenticatedException("");
+    }
+
+    var errorDetails = ErrorDetails.fromMap(jsonDecode(response.body));
+    _logger.log(Level.error, errorDetails);
+    throw ApplicationException(errorDetails.message);
   }
 }

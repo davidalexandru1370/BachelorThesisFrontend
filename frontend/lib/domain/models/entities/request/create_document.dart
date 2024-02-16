@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
+import 'package:frontend/domain/models/abstract/serializable_entity.dart';
 
-import '../abstract/serializable_entity.dart';
+
 
 class CreateDocument extends SerializableEntity {
   late XFile image;
