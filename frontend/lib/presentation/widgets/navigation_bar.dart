@@ -9,6 +9,7 @@ import '../l10n/app_l10n.dart';
 import '../providers/authentication_state.dart';
 import '../screens/main_page.dart';
 import '../screens/new_folder_screen.dart';
+import '../screens/profile_screen.dart';
 import '../screens/register_screen.dart';
 
 class ApplicationNavigationBar extends StatefulWidget {
@@ -77,6 +78,8 @@ class _ApplicationNavigationBarState extends State<ApplicationNavigationBar> {
       ),
       body: <Widget>[
         MainPage(),
+        const Placeholder(),
+        const ProfileScreen()
       ][_currentPageIndex],
     );
   }

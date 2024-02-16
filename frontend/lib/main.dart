@@ -41,6 +41,7 @@ class _MyApp extends State<MyApp> {
         ]),
       );
     }
+
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (context) => AuthenticationProvider()),
