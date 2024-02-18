@@ -55,7 +55,7 @@ class UserService {
     }
   }
 
-  static Future<void> registerWithGoogle(String token) async {
+  static Future<AuthResult> registerWithGoogle(String token) async {
     _logger.log(Level.info, "Registering with google");
     final response = await http.post(
       Uri.parse('${ApiConstants.BASE_URL}/user/register/google'),
@@ -70,6 +70,9 @@ class UserService {
       var errorDetails = ErrorDetails.fromMap(body);
       _logger.log(Level.error, errorDetails.toString());
       throw ApplicationException(errorDetails.message);
+    }
+    else{
+      return AuthResult.fromJson(jsonDecode(response.body));
     }
 
     _logger.log(Level.info, "Registered with google successfully");

@@ -237,10 +237,14 @@ class _RegisterForm extends State<RegisterScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             LoginWithGoogleButton(
-                              afterLoginContinuation: (String token) async {
+                              afterLoginContinuation:
+                                  (String googleToken) async {
                                 try {
-                                  await UserService.registerWithGoogle(token);
-                                  await _afterSuccess(token, context);
+                                  var authResult =
+                                      await UserService.registerWithGoogle(
+                                          googleToken);
+                                  await _afterSuccess(
+                                      authResult.token, context);
                                 } on ApplicationException catch (e) {
                                   ToastNotification.showError(context,
                                       localization.backend_error(e.getMessage));

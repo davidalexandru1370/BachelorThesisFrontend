@@ -275,10 +275,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             LoginWithGoogleButton(
-                              afterLoginContinuation: (String token) async {
+                              afterLoginContinuation: (String googleToken) async {
                                 try {
-                                  await UserService.registerWithGoogle(token);
-                                  await _afterSuccess(token, context);
+                                  var token = await UserService.registerWithGoogle(googleToken);
+                                  await _afterSuccess(token.token, context);
                                 } on ApplicationException catch (e) {
                                   ToastNotification.showError(context,
                                       localization.backend_error(e.getMessage));

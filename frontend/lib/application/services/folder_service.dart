@@ -1,15 +1,14 @@
 import 'dart:convert';
 
-import 'package:frontend/application/secure_storage/secure_storage.dart';
-import 'package:frontend/domain/exceptions/application_exception.dart';
-import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:frontend/application/secure_storage/secure_storage.dart';
 import 'package:frontend/domain/constants/api_constants.dart';
 import 'package:frontend/domain/constants/app_constants.dart';
+import 'package:frontend/domain/exceptions/application_exception.dart';
 import 'package:frontend/domain/exceptions/unauthenticated_exception.dart';
 import 'package:frontend/domain/models/entities/error_details.dart';
 import 'package:frontend/domain/models/entities/request/create_folder.dart';
+import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 
 import '../../domain/models/entities/folder.dart';

@@ -38,6 +38,7 @@
     }
   },
   "createAccount": "Creeaza cont",
+  "loading": "Se incarca...",
   "backend_error": "{error_code, select, 1 {Adresa de email nu exista} 2 {Adresa de email sau parola incorecta} 3 {Nu exista} 4 {} 5 {Adresa de email exista deja} other {Eroare la server}}",
   "@backend_error": {
     "placeholders": {
