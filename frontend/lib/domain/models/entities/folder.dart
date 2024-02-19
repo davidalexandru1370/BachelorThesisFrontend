@@ -6,7 +6,7 @@ import 'package:uuid/uuid.dart';
 import 'document.dart';
 
 class Folder extends SerializableEntity {
-  Uuid id;
+  String id;
   String name;
   FolderType folderType;
   List<Document> document;
@@ -22,7 +22,7 @@ class Folder extends SerializableEntity {
     return {
       'id': id,
       'name': name,
-      'folderType': folderType,
+      'folderType': folderType.index,
       'document': document,
     };
   }
@@ -31,8 +31,10 @@ class Folder extends SerializableEntity {
     return Folder(
       id: map['id'],
       name: map['name'],
-      folderType: map['folderType'],
-      document: map['document'],
+      folderType: FolderType.values.firstWhere((e) => e.index == map['type']),
+      document: (map['documents'] as List<dynamic>)
+          .map((e) => Document.fromMap(e))
+          .toList(),
     );
   }
 }

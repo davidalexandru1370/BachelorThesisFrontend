@@ -16,7 +16,10 @@ class FolderCard extends StatelessWidget {
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       Visibility(
           visible: _folder.document.isNotEmpty,
-          child: Image.network(_folder.document[0].storageUrl)),
+          child: SizedBox(
+              width: 100,
+              height: 100,
+              child: Image.network(_folder.document[0].storageUrl))),
       Column(
         children: [
           Text(_folder.name),

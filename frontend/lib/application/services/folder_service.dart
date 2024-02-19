@@ -70,7 +70,7 @@ class FolderService {
       }
     }
 
-    return Folder.fromMap(jsonDecode(response.data));
+    return Folder.fromMap(response.data);
   }
 
   Future<List<Folder>> getAllFolders(String token) async {

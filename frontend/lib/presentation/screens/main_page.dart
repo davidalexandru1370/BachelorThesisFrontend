@@ -6,6 +6,7 @@ import 'package:frontend/domain/exceptions/unauthenticated_exception.dart';
 import 'package:frontend/domain/models/entities/folder.dart';
 import 'package:frontend/presentation/extensions/exception_extensions.dart';
 import 'package:frontend/presentation/l10n/app_l10n.dart';
+import 'package:frontend/presentation/widgets/folder_card.dart';
 import 'package:frontend/presentation/widgets/notifications/toast_notification.dart';
 
 import '../../application/secure_storage/secure_storage.dart';
@@ -22,7 +23,7 @@ class _MainPageState extends State<MainPage> {
   final FolderService _folderService = FolderService();
   final _localization = Localization();
   List<Folder> _folders = <Folder>[];
-  bool _isLoading = false;
+  bool _isLoading = true;
   bool _hasError = false;
 
   @override
@@ -35,22 +36,32 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     var localization = _localization.getAppLocalizations(context);
     return Scaffold(
-      body: _isLoading == true
-          ? Center(
-              child: Column(
-              children: [
-                const CircularProgressIndicator(),
-                Text(localization!.loading)
-              ],
-            ))
-          : SizedBox(
-              height: MediaQuery.of(context).size.height * 0.75,
-              child: ListView.separated(
-                  physics: const BouncingScrollPhysics(),
-                  itemBuilder: (context, index) {},
-                  separatorBuilder: (context, index) => const Divider(),
-                  itemCount: _folders.length),
-            ),
+      body: SizedBox(
+        height: MediaQuery.of(context).size.height * 0.75,
+        child: _isLoading == true
+            ? SizedBox(
+                width: double.infinity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const CircularProgressIndicator(),
+                    Text(localization!.loading)
+                  ],
+                ),
+              )
+            : Center(
+                child: ListView.separated(
+                    physics: const BouncingScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.9,
+                          child: FolderCard(folder: _folders[index]));
+                    },
+                    separatorBuilder: (context, index) => const Divider(),
+                    itemCount: _folders.length),
+              ),
+      ),
     );
   }
 
