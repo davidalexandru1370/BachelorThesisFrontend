@@ -82,7 +82,6 @@ class FolderService {
         });
 
     if (response.statusCode == 200) {
-      print(response.body);
       _logger.log(Level.info, 'Got all folders successfully');
       return (jsonDecode(response.body) as List)
           .map((e) => Folder.fromMap(e))
