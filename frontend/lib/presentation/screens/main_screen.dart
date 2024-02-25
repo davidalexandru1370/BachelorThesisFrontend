@@ -35,6 +35,28 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     var localization = _localization.getAppLocalizations(context);
+
+    if (_hasError) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(localization!.error),
+            TextButton(
+              onPressed: () async {
+                setState(() {
+                  _isLoading = true;
+                  _hasError = false;
+                });
+                await _getAllDocuments();
+              },
+              child: Text(localization.tryAgain),
+            )
+          ],
+        ),
+      );
+    }
+
     return Scaffold(
       body: SizedBox(
         height: MediaQuery.of(context).size.height * 0.75,
@@ -50,16 +72,25 @@ class _MainPageState extends State<MainPage> {
                   ],
                 ),
               )
-            : Center(
-                child: ListView.separated(
-                    physics: const BouncingScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.9,
-                          child: FolderCard(folder: _folders[index]));
-                    },
-                    separatorBuilder: (context, index) => const Divider(),
-                    itemCount: _folders.length),
+            : RefreshIndicator(
+                onRefresh: () async {
+                  setState(() {
+                    _isLoading = true;
+                    _hasError = false;
+                  });
+                  await _getAllDocuments();
+                },
+                child: Center(
+                  child: ListView.separated(
+                      physics: const BouncingScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        return SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            child: FolderCard(folder: _folders[index]));
+                      },
+                      separatorBuilder: (context, index) => const Divider(),
+                      itemCount: _folders.length),
+                ),
               ),
       ),
     );
@@ -72,6 +103,7 @@ class _MainPageState extends State<MainPage> {
     try {
       var folders = await _folderService.getAllFolders(token!);
       setState(() {
+        _hasError = false;
         _folders = folders;
       });
     } on ApplicationException catch (e) {

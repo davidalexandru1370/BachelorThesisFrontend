@@ -8,7 +8,7 @@ import '../../application/services/user_service.dart';
 import '../../domain/constants/app_constants.dart';
 import '../l10n/app_l10n.dart';
 import '../providers/authentication_state.dart';
-import '../screens/main_page.dart';
+import '../screens/main_screen.dart';
 import '../screens/new_folder_screen.dart';
 import '../screens/profile_screen.dart';
 import '../screens/register_screen.dart';
