@@ -154,6 +154,7 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
             ElevatedButton(
               child: Text(localization!.submit),
               onPressed: () async {
+                _showModalAfterUpload(context);
                 await _onSubmit();
               },
             ),
@@ -191,6 +192,41 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
     setState(() {
       _images.add(image);
     });
+  }
+
+  void _showModalAfterUpload(BuildContext context) {
+    var localization = _localization.getAppLocalizations(context);
+    showModalBottomSheet(
+      isDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: MediaQuery.of(context).size.height * 0.5,
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Row(
+                  children: [
+                    Text(
+                      localization!.uploadImage,
+                      style: const TextStyle(
+                          fontSize: 24.0, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                Row(children: [
+                  Text(localization!.analyzeDocument,
+                      style: const TextStyle(
+                          fontSize: 24.0, fontWeight: FontWeight.bold))
+                ])
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   Future<void> _onSubmit() async {

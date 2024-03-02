@@ -41,6 +41,8 @@
   "loading": "Se incarca...",
   "error": "Eroare",
   "tryAgain": "Incearca din nou",
+  "uploadImage": "Se incarca imaginile",
+  "analyzeDocument": "Se analizeaza documentele",
   "backend_error": "{error_code, select, 1 {Adresa de email nu exista} 2 {Adresa de email sau parola incorecta} 3 {Nu exista} 4 {} 5 {Adresa de email exista deja} other {Eroare la server}}",
   "@backend_error": {
     "placeholders": {
