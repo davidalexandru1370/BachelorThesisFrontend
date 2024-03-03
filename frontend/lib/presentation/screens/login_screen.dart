@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/application/secure_storage/secure_storage.dart';
 import 'package:frontend/domain/constants/app_constants.dart';
 import 'package:frontend/domain/exceptions/application_exception.dart';
-import 'package:frontend/main.dart';
 import 'package:frontend/presentation/extensions/exception_extensions.dart';
 import 'package:frontend/presentation/screens/register_screen.dart';
-import 'package:provider/provider.dart';
 import 'package:toastification/toastification.dart';
 
 import '../../application/services/user_service.dart';
-import '../../domain/models/entities/auth_result.dart';
 import '../../domain/models/entities/user_credentials.dart';
 import '../l10n/app_l10n.dart';
 import '../widgets/login_with_google_button.dart';
@@ -228,7 +224,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                       .text));
 
                                           _storage.insert(
-                                              AppConstants.TOKEN, result.token);
+                                              AppConstants.ACCESS_TOKEN, result.token);
                                           Navigator.pushReplacement(
                                               context,
                                               MaterialPageRoute(
@@ -295,7 +291,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _afterSuccess(String token, BuildContext context) async {
-    await _storage.insert(AppConstants.TOKEN, token);
+    await _storage.insert(AppConstants.ACCESS_TOKEN, token);
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (context) => const ApplicationNavigationBar(),

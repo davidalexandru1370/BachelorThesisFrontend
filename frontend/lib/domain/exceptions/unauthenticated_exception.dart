@@ -1,7 +1,7 @@
 class UnauthenticatedException implements Exception {
-  final String message;
+  late String message = "";
 
-  UnauthenticatedException(this.message);
+  UnauthenticatedException({this.message = ""});
 
   @override
   String toString() {

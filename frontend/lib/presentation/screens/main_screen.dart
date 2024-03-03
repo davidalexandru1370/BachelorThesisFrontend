@@ -99,7 +99,7 @@ class _MainPageState extends State<MainPage> {
   Future<void> _getAllDocuments() async {
     await Future.delayed(const Duration(seconds: 0));
     var token = await _storage.readOrThrow(
-        AppConstants.TOKEN, UnauthenticatedException(''));
+        AppConstants.ACCESS_TOKEN, UnauthenticatedException());
     try {
       var folders = await _folderService.getAllFolders(token!);
       setState(() {

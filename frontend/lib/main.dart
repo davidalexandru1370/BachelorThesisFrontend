@@ -65,7 +65,7 @@ class _MyApp extends State<MyApp> {
   }
 
   Future<void> _checkIfLoggedIn() async {
-    if ((await _storage.contains(AppConstants.TOKEN)) == false) {
+    if ((await _storage.contains(AppConstants.ACCESS_TOKEN)) == false) {
       setState(() {
         _waiting = false;
       });

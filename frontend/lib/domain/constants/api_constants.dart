@@ -4,4 +4,6 @@ class ApiConstants {
               "Development"
           ? "http://192.168.43.181:5176/api"
           : "https://api.example.com";
+
+  static const String WEBSOCKET_URL = "http://192.168.43.181:5176/api";
 }

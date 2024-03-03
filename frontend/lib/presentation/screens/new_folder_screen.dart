@@ -4,9 +4,12 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/application/websocket/web_socket.dart';
+import 'package:frontend/domain/models/entities/create_folder_notification.dart';
 import 'package:frontend/domain/models/entities/request/create_document.dart';
 import 'package:frontend/domain/models/entities/request/create_folder.dart';
 import 'package:frontend/presentation/screens/camera_screen.dart';
+import 'package:frontend/presentation/widgets/notifications/toast_notification.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../application/services/folder_service.dart';
@@ -26,6 +29,8 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
   String _dropdownValue = "";
   final ImagePicker _imagePicker = ImagePicker();
   final FolderService _folderService = FolderService();
+  final WebSocketConnection _webSocketConnection = WebSocketConnection.instance;
+  final CreateFolderNotification _notification = CreateFolderNotification();
   var _localization = Localization();
 
   @override
@@ -208,19 +213,45 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       localization!.uploadImage,
                       style: const TextStyle(
-                          fontSize: 24.0, fontWeight: FontWeight.bold),
+                          fontSize: 18.0, fontWeight: FontWeight.bold),
                     ),
+                    _notification.imagesUploaded == null
+                        ? const CircularProgressIndicator()
+                        : _notification.imagesUploaded == true
+                            ? const Icon(
+                                Icons.check,
+                                color: Colors.green,
+                              )
+                            : const Icon(
+                                Icons.close,
+                                color: Colors.red,
+                              ),
                   ],
                 ),
-                Row(children: [
-                  Text(localization!.analyzeDocument,
-                      style: const TextStyle(
-                          fontSize: 24.0, fontWeight: FontWeight.bold))
-                ])
+                const Spacer(),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(localization!.analyzeDocument,
+                          style: const TextStyle(
+                              fontSize: 18.0, fontWeight: FontWeight.bold)),
+                      _notification.documentsAnalyzed == null
+                          ? const CircularProgressIndicator()
+                          : _notification.documentsAnalyzed == true
+                              ? const Icon(
+                                  Icons.check,
+                                  color: Colors.green,
+                                )
+                              : const Icon(
+                                  Icons.close,
+                                  color: Colors.red,
+                                ),
+                    ])
               ],
             ),
           ),
@@ -234,12 +265,21 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
       name: _dropdownValue,
       document: _images.map((e) => CreateDocument(image: e)).toList(),
     );
-
     try {
+      await _onNotificationReceived();
       await _folderService.createFolder(folder);
     } on TimeoutException {
     } catch (e) {
-      print(e);
+      ToastNotification.showError(context, e.toString());
     }
+  }
+
+  Future<void> _onNotificationReceived() async {
+    await _webSocketConnection.listen((CreateFolderNotification notification) {
+      setState(() {
+        _notification.documentsAnalyzed ??= notification.documentsAnalyzed;
+        _notification.imagesUploaded ??= notification.imagesUploaded;
+      });
+    });
   }
 }

@@ -261,7 +261,7 @@ class _RegisterForm extends State<RegisterScreen> {
   }
 
   Future<void> _afterSuccess(String token, BuildContext context) async {
-    await _storage.insert(AppConstants.TOKEN, token);
+    await _storage.insert(AppConstants.ACCESS_TOKEN, token);
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (context) => const ApplicationNavigationBar(),

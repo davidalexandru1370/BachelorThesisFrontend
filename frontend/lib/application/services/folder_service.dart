@@ -19,8 +19,8 @@ class FolderService {
   final _secureStorage = SecureStorage();
 
   FolderService() {
-    if (_secureStorage.contains(AppConstants.TOKEN) == false) {
-      throw UnauthenticatedException('Unauthorized');
+    if (_secureStorage.contains(AppConstants.ACCESS_TOKEN) == false) {
+      throw UnauthenticatedException(message: 'Unauthorized');
     }
   }
 
@@ -28,7 +28,7 @@ class FolderService {
     _logger.log(Level.info, 'Creating folder: $folder');
     var headers = {
       'Authorization':
-          'Bearer ${await _secureStorage.read(AppConstants.TOKEN)}',
+          'Bearer ${await _secureStorage.read(AppConstants.ACCESS_TOKEN)}',
       'Content-Type': 'multipart/form-data'
     };
 
@@ -62,7 +62,7 @@ class FolderService {
     } else {
       _logger.log(Level.error, 'Error creating folder');
       if (response.statusCode == 401) {
-        throw UnauthenticatedException('Unauthorized');
+        throw UnauthenticatedException(message: 'Unauthorized');
       } else {
         var errorDetails = ErrorDetails.fromMap(jsonDecode(response.data));
         _logger.log(Level.error, errorDetails);
@@ -89,13 +89,13 @@ class FolderService {
     } else {
       _logger.log(Level.error, "Error getting all folders");
       _handleError(response);
-      throw UnauthenticatedException("");
+      throw UnauthenticatedException();
     }
   }
 
   void _handleError(http.Response response) {
     if (response.statusCode == 401) {
-      throw UnauthenticatedException("");
+      throw UnauthenticatedException();
     }
 
     var errorDetails = ErrorDetails.fromMap(jsonDecode(response.body));

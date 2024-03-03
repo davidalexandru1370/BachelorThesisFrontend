@@ -94,7 +94,7 @@ class _ApplicationNavigationBarState extends State<ApplicationNavigationBar> {
   Future<void> _getUserProfile() async {
     await Future.delayed(const Duration(seconds: 0));
 
-    final token = await _storage.read(AppConstants.TOKEN);
+    final token = await _storage.read(AppConstants.ACCESS_TOKEN);
     final authenticationProvider = context.read<AuthenticationProvider>();
     try {
       var userProfile = await UserService.getUserProfile(token!);
@@ -104,7 +104,7 @@ class _ApplicationNavigationBarState extends State<ApplicationNavigationBar> {
       });
     } on Exception catch (e) {
       _logger.log(Level.error, e);
-      await _storage.delete(AppConstants.TOKEN);
+      await _storage.delete(AppConstants.ACCESS_TOKEN);
       Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (context) => const RegisterScreen()));
     }

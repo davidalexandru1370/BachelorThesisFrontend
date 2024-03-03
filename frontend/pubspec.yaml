@@ -48,7 +48,7 @@ dependencies:
   google_sign_in: ^6.2.1
   toastification: ^1.2.0
   web_socket_channel: ^2.4.0
-
+  signalr_netcore: ^0.1.7+2-nullsafety.3
 
 dev_dependencies:
   flutter_test:
