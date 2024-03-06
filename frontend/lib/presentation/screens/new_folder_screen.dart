@@ -38,6 +38,7 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
   final FolderService _folderService = FolderService();
   final WebSocketConnection _webSocketConnection = WebSocketConnection.instance;
   CreateFolderNotification _notification = CreateFolderNotification();
+  StateSetter? _setModalState;
   var _localization = Localization();
 
   @override
@@ -211,45 +212,28 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
     showModalBottomSheet(
       isDismissible: false,
       context: context,
-      builder: (BuildContext context) {
-        return SizedBox(
-          height: MediaQuery.of(context).size.height * 0.5,
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      localization!.uploadImage,
-                      style: const TextStyle(
-                          fontSize: 18.0, fontWeight: FontWeight.bold),
-                    ),
-                    _notification.imagesUploaded == null
-                        ? const CircularProgressIndicator()
-                        : _notification.imagesUploaded == true
-                            ? const Icon(
-                                Icons.check,
-                                color: Colors.green,
-                              )
-                            : const Icon(
-                                Icons.close,
-                                color: Colors.red,
-                              ),
-                  ],
-                ),
-                const Spacer(),
-                Row(
+      builder: (context) {
+        return StatefulBuilder(
+            builder: (BuildContext context, StateSetter setModalState) {
+          _setModalState = setModalState;
+          return SizedBox(
+            height: MediaQuery.of(context).size.height * 0.5,
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(localization!.analyzeDocument,
-                          style: const TextStyle(
-                              fontSize: 18.0, fontWeight: FontWeight.bold)),
-                      _notification.documentsAnalyzed == null
+                      Text(
+                        localization!.uploadImage,
+                        style: const TextStyle(
+                            fontSize: 18.0, fontWeight: FontWeight.bold),
+                      ),
+                      _notification.imagesUploaded == null
                           ? const CircularProgressIndicator()
-                          : _notification.documentsAnalyzed == true
+                          : _notification.imagesUploaded == true
                               ? const Icon(
                                   Icons.check,
                                   color: Colors.green,
@@ -258,11 +242,32 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
                                   Icons.close,
                                   color: Colors.red,
                                 ),
-                    ])
-              ],
+                    ],
+                  ),
+                  const Spacer(),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(localization!.analyzeDocument,
+                            style: const TextStyle(
+                                fontSize: 18.0, fontWeight: FontWeight.bold)),
+                        _notification.documentsAnalyzed == null
+                            ? const CircularProgressIndicator()
+                            : _notification.documentsAnalyzed == true
+                                ? const Icon(
+                                    Icons.check,
+                                    color: Colors.green,
+                                  )
+                                : const Icon(
+                                    Icons.close,
+                                    color: Colors.red,
+                                  ),
+                      ])
+                ],
+              ),
             ),
-          ),
-        );
+          );
+        });
       },
     );
   }
@@ -285,10 +290,12 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
           .build();
       await hubConnection.start();
       hubConnection!.on("SendNewStatus", (arguments) {
-        var state = CreateFolderNotification.fromMap(
+        var notification = CreateFolderNotification.fromMap(
             arguments![0] as Map<String, dynamic>);
-        Logger().log(Level.info, "Received message: $state");
-        _onNotificationReceived(state);
+        Logger().log(Level.info, "Received message: $notification");
+        _setModalState!(() {
+          _notification = notification;
+        });
       });
       await _folderService.createFolder(folder);
       Navigator.pop(context);
@@ -298,11 +305,5 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
       Logger().log(Level.error, "Error: $e");
       ToastNotification.showError(context, e.toString());
     }
-  }
-
-  void _onNotificationReceived(CreateFolderNotification notification) {
-    setState(() {
-      _notification = notification;
-    });
   }
 }
