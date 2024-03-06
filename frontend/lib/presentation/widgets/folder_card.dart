@@ -4,8 +4,9 @@ import 'package:frontend/domain/models/entities/folder.dart';
 
 class FolderCard extends StatelessWidget {
   final Folder _folder;
+  final Function onDelete;
 
-  const FolderCard({Key? key, required Folder folder})
+  const FolderCard({Key? key, required Folder folder, required this.onDelete})
       : _folder = folder,
         super(key: key);
 
@@ -20,9 +21,18 @@ class FolderCard extends StatelessWidget {
               width: 100,
               height: 100,
               child: Image.network(_folder.document[0].storageUrl))),
-      Column(
+      Row(
         children: [
           Text(_folder.name),
+          GestureDetector(
+            onTap: () {
+              onDelete(_folder.id);
+            },
+            child: const Icon(
+              Icons.delete,
+              color: Colors.red,
+            ),
+          ),
         ],
       ),
     ]));

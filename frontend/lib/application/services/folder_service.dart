@@ -93,6 +93,26 @@ class FolderService {
     }
   }
 
+  Future<void> deleteFolder(String folderId) async {
+    _logger.log(Level.info, 'Deleting folder by id');
+    var token = await _secureStorage.readOrThrow(
+        AppConstants.ACCESS_TOKEN, UnauthenticatedException());
+
+    var response = await http.delete(
+        Uri.parse('${ApiConstants.BASE_URL}/folder'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token'
+        });
+
+    if (response.statusCode == 200) {
+      _logger.log(Level.info, "Deleted folder successfully");
+    } else {
+      _logger.log(Level.error, "Error deleting folder by id");
+      _handleError(response);
+    }
+  }
+
   void _handleError(http.Response response) {
     if (response.statusCode == 401) {
       throw UnauthenticatedException();

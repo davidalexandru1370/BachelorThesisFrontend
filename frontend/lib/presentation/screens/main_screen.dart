@@ -86,7 +86,18 @@ class _MainPageState extends State<MainPage> {
                       itemBuilder: (context, index) {
                         return SizedBox(
                             width: MediaQuery.of(context).size.width * 0.9,
-                            child: FolderCard(folder: _folders[index]));
+                            child: FolderCard(
+                              folder: _folders[index],
+                              onDelete: () async {
+                                await _deleteFolder(_folders[index].id);
+                                setState(() {
+                                  _folders = _folders
+                                      .where((element) =>
+                                          element.id != _folders[index].id)
+                                      .toList();
+                                });
+                              },
+                            ));
                       },
                       separatorBuilder: (context, index) => const Divider(),
                       itemCount: _folders.length),
@@ -119,5 +130,16 @@ class _MainPageState extends State<MainPage> {
         _isLoading = false;
       });
     }
+  }
+
+  Future<void> _deleteFolder(String folderId) async {
+    try {
+      await _folderService.deleteFolder(folderId);
+    } on ApplicationException catch (e) {
+      var message = _localization
+          .getAppLocalizations(context)!
+          .backend_error(e.getMessage);
+      ToastNotification.showError(context, message);
+    } finally {}
   }
 }
