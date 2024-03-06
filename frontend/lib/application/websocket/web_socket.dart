@@ -9,36 +9,23 @@ import '../secure_storage/secure_storage.dart';
 
 class WebSocketConnection {
   static final WebSocketConnection instance = WebSocketConnection._init();
-  static WebSocketChannel? _channel = init();
   static final SecureStorage _storage = SecureStorage();
-
+  static late HubConnection? hubConnection;
   WebSocketConnection._init();
 
-  static WebSocketChannel init() {
-    try {
-      var connection = WebSocketChannel.connect(
-        Uri.parse(
-            ApiConstants.WEBSOCKET_URL + "/hubs/createFolder/notification"),
-      );
-      return connection;
-    } catch (e) {
-      Logger().log(Level.error, "Error connecting to websocket: $e");
-      return init();
-    }
+  static void init() {
+    hubConnection = HubConnectionBuilder()
+        .withUrl(ApiConstants.WEBSOCKET_URL + "/hubs/createFolder/notification",
+        options: HttpConnectionOptions(
+            logMessageContent: true,
+            accessTokenFactory: () async => await _storage.readOrThrow(
+                AppConstants.ACCESS_TOKEN, UnauthenticatedException())))
+        .build();
+
   }
 
   Future<void> listen(Function onReceive) async {
-    final hubConnection = HubConnectionBuilder()
-        .withUrl(ApiConstants.WEBSOCKET_URL + "/hubs/createFolder/notification",
-            options: HttpConnectionOptions(
-                logMessageContent: true,
-                accessTokenFactory: () async => await _storage.readOrThrow(
-                    AppConstants.ACCESS_TOKEN, UnauthenticatedException())))
-        .build();
-
-    await hubConnection.start();
-
-    hubConnection.on("SendNewStatus", (arguments) {
+    hubConnection!.on("SendNewStatus", (arguments) {
       Logger().log(Level.info, "Received message: $arguments");
       onReceive(arguments);
     });

@@ -4,7 +4,6 @@ import 'package:frontend/domain/constants/app_constants.dart';
 import 'package:frontend/domain/exceptions/application_exception.dart';
 import 'package:frontend/presentation/extensions/exception_extensions.dart';
 import 'package:frontend/presentation/screens/register_screen.dart';
-import 'package:toastification/toastification.dart';
 
 import '../../application/services/user_service.dart';
 import '../../domain/models/entities/user_credentials.dart';
@@ -231,14 +230,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   builder: (context) =>
                                                       const ApplicationNavigationBar()));
                                         } on ApplicationException catch (e) {
-                                          toastification.show(
-                                            context: context,
-                                            title: Text(localization
-                                                .backend_error(e.getMessage)),
-                                            autoCloseDuration:
-                                                const Duration(seconds: 5),
-                                            type: ToastificationType.error,
-                                          );
+                                          // toastification.show(
+                                          //   context: context,
+                                          //   title: Text(localization
+                                          //       .backend_error(e.getMessage)),
+                                          //   autoCloseDuration:
+                                          //       const Duration(seconds: 5),
+                                          //   type: ToastificationType.error,
+                                          // );
                                         } finally {
                                           setState(() {
                                             _isLoading = false;

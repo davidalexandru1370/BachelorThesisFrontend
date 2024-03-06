@@ -11,8 +11,15 @@ import 'package:frontend/domain/models/entities/request/create_folder.dart';
 import 'package:frontend/presentation/screens/camera_screen.dart';
 import 'package:frontend/presentation/widgets/notifications/toast_notification.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:logger/logger.dart';
+import 'package:signalr_netcore/http_connection_options.dart';
+import 'package:signalr_netcore/hub_connection_builder.dart';
 
+import '../../application/secure_storage/secure_storage.dart';
 import '../../application/services/folder_service.dart';
+import '../../domain/constants/api_constants.dart';
+import '../../domain/constants/app_constants.dart';
+import '../../domain/exceptions/unauthenticated_exception.dart';
 import '../l10n/app_l10n.dart';
 
 class CreateNewFolderScreen extends StatefulWidget {
@@ -30,7 +37,7 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
   final ImagePicker _imagePicker = ImagePicker();
   final FolderService _folderService = FolderService();
   final WebSocketConnection _webSocketConnection = WebSocketConnection.instance;
-  final CreateFolderNotification _notification = CreateFolderNotification();
+  CreateFolderNotification _notification = CreateFolderNotification();
   var _localization = Localization();
 
   @override
@@ -205,7 +212,7 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
       isDismissible: false,
       context: context,
       builder: (BuildContext context) {
-        return Container(
+        return SizedBox(
           height: MediaQuery.of(context).size.height * 0.5,
           child: Padding(
             padding: const EdgeInsets.all(20.0),
@@ -266,20 +273,36 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
       document: _images.map((e) => CreateDocument(image: e)).toList(),
     );
     try {
-      await _onNotificationReceived();
+      SecureStorage _storage = SecureStorage();
+      var hubConnection = HubConnectionBuilder()
+          .withUrl(
+              ApiConstants.WEBSOCKET_URL + "/hubs/createFolder/notification",
+              options: HttpConnectionOptions(
+                  requestTimeout: 90000,
+                  logMessageContent: true,
+                  accessTokenFactory: () async => await _storage.readOrThrow(
+                      AppConstants.ACCESS_TOKEN, UnauthenticatedException())))
+          .build();
+      await hubConnection.start();
+      hubConnection!.on("SendNewStatus", (arguments) {
+        var state = CreateFolderNotification.fromMap(
+            arguments![0] as Map<String, dynamic>);
+        Logger().log(Level.info, "Received message: $state");
+        _onNotificationReceived(state);
+      });
       await _folderService.createFolder(folder);
+      Navigator.pop(context);
+      Navigator.pop(context);
     } on TimeoutException {
     } catch (e) {
+      Logger().log(Level.error, "Error: $e");
       ToastNotification.showError(context, e.toString());
     }
   }
 
-  Future<void> _onNotificationReceived() async {
-    await _webSocketConnection.listen((CreateFolderNotification notification) {
-      setState(() {
-        _notification.documentsAnalyzed ??= notification.documentsAnalyzed;
-        _notification.imagesUploaded ??= notification.imagesUploaded;
-      });
+  void _onNotificationReceived(CreateFolderNotification notification) {
+    setState(() {
+      _notification = notification;
     });
   }
 }

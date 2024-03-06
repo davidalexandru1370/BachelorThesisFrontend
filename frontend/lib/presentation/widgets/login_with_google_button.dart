@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logger/logger.dart';
-import 'package:toastification/toastification.dart';
 import '../l10n/app_l10n.dart';
 
 import '../utilities/custom_icons.dart';
@@ -63,11 +62,11 @@ class LoginWithGoogleButton extends StatelessWidget {
   }
 
   void _showError(BuildContext context, String message) {
-    toastification.show(
-      context: context,
-      title: Text(message),
-      autoCloseDuration: const Duration(seconds: 5),
-      type: ToastificationType.error,
-    );
+    // toastification.show(
+    //   context: context,
+    //   title: Text(message),
+    //   autoCloseDuration: const Duration(seconds: 5),
+    //   type: ToastificationType.error,
+    // );
   }
 }

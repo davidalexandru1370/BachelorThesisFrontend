@@ -3,13 +3,17 @@ class CreateFolderNotification {
 
   bool? documentsAnalyzed;
 
-  CreateFolderNotification(
-      {this.imagesUploaded, this.documentsAnalyzed});
+  CreateFolderNotification({this.imagesUploaded, this.documentsAnalyzed});
 
   factory CreateFolderNotification.fromMap(Map<String, dynamic> map) {
     return CreateFolderNotification(
       imagesUploaded: map['imagesUploaded'],
       documentsAnalyzed: map['documentsAnalyzed'],
     );
+  }
+
+  @override
+  String toString() {
+    return 'CreateFolderNotification{imagesUploaded: $imagesUploaded, documentsAnalyzed: $documentsAnalyzed}';
   }
 }
