@@ -1,0 +1,61 @@
+{
+  "helloWorld": "Hello World!",
+  "@helloWorld": {
+    "description": "The conventional newborn programmer greeting"
+  },
+  "forgotPassword": "Forgot Password?",
+  "@forgotPassword": {
+    "description": "A link to the forgot password page"
+  },
+  "uploadPhoto": "Upload Photo",
+  "retakePhoto": "Retake Photo",
+  "submit": "Send",
+  "cancel": "Cancel",
+  "carRegisteredInCountry": "Vehicle already registered in country",
+  "carFromAnotherCountry": "Vehicle registered in another country",
+  "carNeverRegistered": "New vehicle never registered",
+  "@carNeverRegistered": {
+    "description": "A new vehicle that has never been registered before"
+  },
+  "home": "Home",
+  "profile": "Profile",
+  "settings": "Settings",
+  "logout": "Logout",
+  "camera": "Camera",
+  "gallery": "Gallery",
+  "addImage": "Add image",
+  "loginWithGoogle": "Login with Google",
+  "errorLoginWithGoogle": "Error logging with Google",
+  "connectNow": "Connect now",
+  "alreadyHaveAccount": "Already having an",
+  "account": "Account",
+  "enterEmail": "Please, enter your email",
+  "enterPassword": "Please, enter your password",
+  "emailIsNotValid": "Email is not valid",
+  "passwordMustBeAtLeast": "Password must be at least {count}",
+  "@passwordMustBeAtLeast": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "email": "Email",
+  "password": "Password",
+  "dontHave": "{multiplier, select, male{Don't have an} female{Don't have a} other{Don't have an}}",
+  "@dontHave": {
+    "placeholders": {
+      "multiplier": {}
+    }
+  },
+  "createAccount": "Create account",
+  "loading": "Loading...",
+  "error": "Error",
+  "tryAgain": "Try again",
+  "uploadImage": "Uploading images",
+  "analyzeDocument": "Analyzing documents",
+  "backend_error": "{error_code, select, 1 {Email address does not exist} 2 {Email address or password are incorrect} 3 {Not found} 4 {} 5 {Email Address already exists} other {Server error}}",
+  "@backend_error": {
+    "placeholders": {
+      "error_code": {}
+    }
+  }
+}

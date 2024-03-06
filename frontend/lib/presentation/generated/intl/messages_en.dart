@@ -21,5 +21,19 @@ class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
   final messages = _notInlinedMessages(_notInlinedMessages);
-  static Map<String, Function> _notInlinedMessages(_) => <String, Function>{};
+  static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+        "carFromAnotherCountry": MessageLookupByLibrary.simpleMessage(
+            "Vehicle registered in another country"),
+        "carNeverRegistered": MessageLookupByLibrary.simpleMessage(
+            "New vehicle never registered"),
+        "carRegisteredInCountry": MessageLookupByLibrary.simpleMessage(
+            "Vehicle already registered in country"),
+        "forgotPassword":
+            MessageLookupByLibrary.simpleMessage("Forgot Password?"),
+        "helloWorld": MessageLookupByLibrary.simpleMessage("Hello World!"),
+        "retakePhoto": MessageLookupByLibrary.simpleMessage("Retake Photo"),
+        "submit": MessageLookupByLibrary.simpleMessage("Send"),
+        "uploadPhoto": MessageLookupByLibrary.simpleMessage("Upload Photo")
+      };
 }

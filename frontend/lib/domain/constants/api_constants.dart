@@ -1,8 +1,9 @@
-import 'dart:io';
-
 class ApiConstants {
-  static final Map<String, String> _environment = Platform.environment;
-  static final String BASE_URL = String.fromEnvironment("name", defaultValue: "Development") == "Development"
-      ? "http://172.22.0.1:8080/api"
-      : "https://api.example.com";
+  static const String BASE_URL =
+      String.fromEnvironment("env", defaultValue: "Development") ==
+              "Development"
+          ? "http://192.168.43.181:5176/api"
+          : "https://api.example.com";
+
+  static const String WEBSOCKET_URL = "http://192.168.43.181:5176/api";
 }
