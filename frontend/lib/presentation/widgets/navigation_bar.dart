@@ -80,7 +80,7 @@ class _ApplicationNavigationBarState extends State<ApplicationNavigationBar> {
         body: <Widget>[
           const MainPage(),
           const Placeholder(),
-          const ProfileScreen()
+          ProfileScreen()
         ][_currentPageIndex],
       );
     } on UnauthenticatedException catch (e) {
