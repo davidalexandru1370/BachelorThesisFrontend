@@ -3,30 +3,39 @@ import 'package:flutter/material.dart';
 import 'package:frontend/presentation/l10n/app_l10n.dart';
 
 class AreYouSureModal {
-  static _getDialog(BuildContext context,
+  static _getDialog(BuildContext dialogContext, BuildContext appContext,
       {Function? onYes = null, Function? onCancel = null}) {
-    var localization = Localization().getAppLocalizations(context);
+    var localization = Localization().getAppLocalizations(appContext);
     return Dialog(
-      child: Column(
-        children: [
-          Text(localization!.areYouSure),
-          Row(
-            children: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text(localization.no),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text(localization.yes),
-              ),
-            ],
-          ),
-        ],
+      alignment: Alignment.center,
+      child: SizedBox(
+        height: MediaQuery.of(dialogContext).size.height * 0.5,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(localization!.areYouSure),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                  onPressed: () {
+                    Navigator.of(dialogContext).pop();
+                  },
+                  child: Text(localization.cancel),
+                ),
+                ElevatedButton(
+                  style:
+                      ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                  onPressed: () {
+                    Navigator.of(dialogContext).pop();
+                  },
+                  child: Text(localization.yes),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -35,8 +44,9 @@ class AreYouSureModal {
       {Function? onYes, Function? onCancel}) {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
-        return _getDialog(context, onYes: onYes, onCancel: onCancel);
+      builder: (BuildContext dialogContext) {
+        return _getDialog(dialogContext, context,
+            onYes: onYes, onCancel: onCancel);
       },
     );
   }
