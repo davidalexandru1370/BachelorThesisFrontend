@@ -6,6 +6,7 @@ import 'package:frontend/domain/exceptions/unauthenticated_exception.dart';
 import 'package:frontend/domain/models/entities/folder.dart';
 import 'package:frontend/presentation/extensions/exception_extensions.dart';
 import 'package:frontend/presentation/l10n/app_l10n.dart';
+import 'package:frontend/presentation/screens/view_folder_screen.dart';
 import 'package:frontend/presentation/widgets/are_you_sure_modal.dart';
 import 'package:frontend/presentation/widgets/folder_card.dart';
 import 'package:frontend/presentation/widgets/notifications/toast_notification.dart';
@@ -88,6 +89,14 @@ class _MainPageState extends State<MainPage> {
                         return SizedBox(
                             width: MediaQuery.of(context).size.width * 0.9,
                             child: FolderCard(
+                              onClick: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ViewFolderScreen(
+                                              folder: _folders[index],
+                                            )));
+                              },
                               folder: _folders[index],
                               onDelete: () async {
                                 AreYouSureModal.displayDialog(context,

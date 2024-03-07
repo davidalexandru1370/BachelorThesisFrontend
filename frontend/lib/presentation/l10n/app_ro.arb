@@ -46,6 +46,13 @@
   "areYouSure": "Esti sigur ca doresti sa continui?",
   "yes": "Da",
   "no": "Nu",
+  "folder": "Dosar",
+  "document_type": "{doc_type, select, identityCard {Buletin} ownershipContract {Contract de vanzare-cumparare} unregisterVehicle {Certificat de radiere} other {Document neidentificat}}",
+  "@document_type": {
+    "placeholders": {
+      "doc_type": {}
+    }
+  },
   "backend_error": "{error_code, select, 1 {Adresa de email nu exista} 2 {Adresa de email sau parola incorecta} 3 {Nu exista} 4 {} 5 {Adresa de email exista deja} other {Eroare la server}}",
   "@backend_error": {
     "placeholders": {

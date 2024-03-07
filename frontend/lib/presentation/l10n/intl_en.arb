@@ -55,6 +55,13 @@
   "areYouSure": "Are you sure you want to continue?",
   "yes": "Yes",
   "no": "No",
+  "folder": "Folder",
+  "document_type": "{doc_type, select, identityCard {Identity card} ownershipContract {Ownership contract} unregisterVehicle {Unregistered vehicle document} other {Not found document}}",
+  "@document_type": {
+    "placeholders": {
+      "doc_type": {}
+    }
+  },
   "backend_error": "{error_code, select, 1 {Email address does not exist} 2 {Email address or password are incorrect} 3 {Not found} 4 {} 5 {Email Address already exists} other {Server error}}",
   "@backend_error": {
     "placeholders": {

@@ -24,12 +24,42 @@ class _ViewFolderScreenState extends State<ViewFolderScreen> {
     var localization = _localization.getAppLocalizations(context);
     return Scaffold(
       appBar: AppBar(),
-      body: Column(
-        children: [
-          Text(folder.name),
-          Text(folder.folderType.toString()),
-        ],
+      body: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        child: Column(
+          children: [
+            Center(
+                child: Text(
+              "${localization!.folder}: ${folder.name}",
+              style: const TextStyle(fontSize: 18),
+            )),
+            Container(
+              child: ListView.separated(
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                separatorBuilder: (context, index) => const Divider(),
+                itemBuilder: (context, index) => Card(
+                    child: Row(
+                  children: [
+                    SizedBox(
+                        width: 100,
+                        height: 100,
+                        child:
+                            Image.network(folder.document[index].storageUrl)),
+                    Text(localization!.document_type(
+                        folder.document[index].documentType.name))
+                  ],
+                )),
+                itemCount: folder.document.length,
+              ),
+            ),
+          ],
+        ),
       ),
     );
+  }
+
+  bool _checkIfFolderIsComplete() {
+    return false;
   }
 }
