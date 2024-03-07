@@ -9,7 +9,6 @@ class Document {
       {required this.id, required this.storageUrl, required this.documentType});
 
   factory Document.fromMap(Map<String, dynamic> map) {
-    print(map.toString());
     return Document(
       id: map['id'],
       storageUrl: map['storageUrl'],

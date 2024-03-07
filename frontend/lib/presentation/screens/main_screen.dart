@@ -6,6 +6,8 @@ import 'package:frontend/domain/exceptions/unauthenticated_exception.dart';
 import 'package:frontend/domain/models/entities/folder.dart';
 import 'package:frontend/presentation/extensions/exception_extensions.dart';
 import 'package:frontend/presentation/l10n/app_l10n.dart';
+import 'package:frontend/presentation/screens/view_folder_screen.dart';
+import 'package:frontend/presentation/widgets/are_you_sure_modal.dart';
 import 'package:frontend/presentation/widgets/folder_card.dart';
 import 'package:frontend/presentation/widgets/notifications/toast_notification.dart';
 
@@ -82,19 +84,30 @@ class _MainPageState extends State<MainPage> {
                 },
                 child: Center(
                   child: ListView.separated(
-                      physics: const BouncingScrollPhysics(),
+                      physics: const AlwaysScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
                         return SizedBox(
                             width: MediaQuery.of(context).size.width * 0.9,
                             child: FolderCard(
+                              onClick: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ViewFolderScreen(
+                                              folder: _folders[index],
+                                            )));
+                              },
                               folder: _folders[index],
                               onDelete: () async {
-                                await _deleteFolder(_folders[index].id);
-                                setState(() {
-                                  _folders = _folders
-                                      .where((element) =>
-                                          element.id != _folders[index].id)
-                                      .toList();
+                                AreYouSureModal.displayDialog(context,
+                                    onYes: () async {
+                                  await _deleteFolder(_folders[index].id);
+                                  setState(() {
+                                    _folders = _folders
+                                        .where((element) =>
+                                            element.id != _folders[index].id)
+                                        .toList();
+                                  });
                                 });
                               },
                             ));
