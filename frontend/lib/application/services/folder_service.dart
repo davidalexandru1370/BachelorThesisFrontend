@@ -99,7 +99,7 @@ class FolderService {
         AppConstants.ACCESS_TOKEN, UnauthenticatedException());
 
     var response = await http.delete(
-        Uri.parse('${ApiConstants.BASE_URL}/folder'),
+        Uri.parse('${ApiConstants.BASE_URL}/folder/$folderId'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Bearer $token'

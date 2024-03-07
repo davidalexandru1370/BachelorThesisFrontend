@@ -25,8 +25,8 @@ class FolderCard extends StatelessWidget {
         children: [
           Text(_folder.name),
           GestureDetector(
-            onTap: () {
-              onDelete(_folder.id);
+            onTap: () async {
+              await onDelete();
             },
             child: const Icon(
               Icons.delete,
