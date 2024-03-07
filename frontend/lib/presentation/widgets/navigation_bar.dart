@@ -44,7 +44,7 @@ class _ApplicationNavigationBarState extends State<ApplicationNavigationBar> {
     try {
       return Scaffold(
         bottomNavigationBar: NavigationBar(
-          onDestinationSelected: (int index) {
+          onDestinationSelected: (int index) async {
             if (index == 1) {
               Navigator.push(
                 context,

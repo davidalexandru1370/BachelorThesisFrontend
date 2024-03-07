@@ -84,7 +84,7 @@ class _MainPageState extends State<MainPage> {
                 },
                 child: Center(
                   child: ListView.separated(
-                      physics: const BouncingScrollPhysics(),
+                      physics: const AlwaysScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
                         return SizedBox(
                             width: MediaQuery.of(context).size.width * 0.9,

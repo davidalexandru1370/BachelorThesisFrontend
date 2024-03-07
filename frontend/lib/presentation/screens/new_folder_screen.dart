@@ -297,9 +297,9 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
           _notification = notification;
         });
       });
-      await _folderService.createFolder(folder);
+      var createdFolder = await _folderService.createFolder(folder);
       Navigator.pop(context);
-      Navigator.pop(context);
+      Navigator.pop(context, createdFolder);
     } on TimeoutException {
     } catch (e) {
       Logger().log(Level.error, "Error: $e");
