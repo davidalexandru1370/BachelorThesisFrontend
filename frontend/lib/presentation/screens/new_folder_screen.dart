@@ -298,6 +298,7 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
         });
       });
       var createdFolder = await _folderService.createFolder(folder);
+      await hubConnection.stop();
       Navigator.pop(context);
       Navigator.pop(context, createdFolder);
     } on TimeoutException {

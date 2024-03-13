@@ -49,10 +49,18 @@
   "folder": "Dosar",
   "romanian": "Romana",
   "english": "Engleza",
+  "folderIsComplete": "Dosarul este complet",
+  "folderIsIncomplete": "Dosarul este incomplet",
   "document_type": "{doc_type, select, identityCard {Buletin} ownershipContract {Contract de vanzare-cumparare} unregisterVehicle {Certificat de radiere} other {Document neidentificat}}",
   "@document_type": {
     "placeholders": {
       "doc_type": {}
+    }
+  },
+  "folder_error": "{error_code, select, 8 {Buletinul nu a fost gasit} 9 {Certificatul de proprietate nu exista} 10 {Certificatul de radiere nu exista} other {Documente invalide}}",
+  "@folder_error": {
+    "placeholders": {
+      "error_code": {}
     }
   },
   "backend_error": "{error_code, select, 1 {Adresa de email nu exista} 2 {Adresa de email sau parola incorecta} 3 {Nu exista} 4 {} 5 {Adresa de email exista deja} other {Eroare la server}}",

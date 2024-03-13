@@ -1,3 +1,5 @@
-enum FolderType{
+enum FolderType {
+  carFromAnotherCountry,
+  carNeverRegistered,
   alreadyRegisteredVehicleInCountry,
 }

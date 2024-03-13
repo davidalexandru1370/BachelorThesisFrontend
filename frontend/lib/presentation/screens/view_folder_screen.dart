@@ -21,6 +21,7 @@ class _ViewFolderScreenState extends State<ViewFolderScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(folder.errors.toString());
     var localization = _localization.getAppLocalizations(context);
     return Scaffold(
       appBar: AppBar(),
@@ -29,9 +30,30 @@ class _ViewFolderScreenState extends State<ViewFolderScreen> {
         child: Column(
           children: [
             Center(
-                child: Text(
-              "${localization!.folder}: ${folder.name}",
-              style: const TextStyle(fontSize: 18),
+                child: Column(
+              children: [
+                Text(
+                  "${localization!.folder}: ${folder.name}",
+                  style: const TextStyle(fontSize: 18),
+                ),
+                Text(
+                    folder.isCorrect
+                        ? localization.folderIsComplete
+                        : localization.folderIsIncomplete,
+                    style: TextStyle(
+                        color: folder.isCorrect ? Colors.green : Colors.red)),
+                ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: folder.errors.length,
+                    itemBuilder: (context, index) {
+                      return Center(
+                        child: Text(
+                            "\u2022 ${localization.folder_error(folder.errors[index])}",
+                            style: const TextStyle(
+                                fontSize: 13, color: Colors.red)),
+                      );
+                    })
+              ],
             )),
             Container(
               child: ListView.separated(
@@ -46,8 +68,8 @@ class _ViewFolderScreenState extends State<ViewFolderScreen> {
                         height: 100,
                         child:
                             Image.network(folder.document[index].storageUrl)),
-                    Text(localization!.document_type(
-                        folder.document[index].documentType.name))
+                    Text(
+                        " ${localization!.document_type(folder.document[index].documentType.name)}")
                   ],
                 )),
                 itemCount: folder.document.length,
