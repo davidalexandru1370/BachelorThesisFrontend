@@ -9,12 +9,15 @@ class FolderCard extends StatelessWidget {
   final Function _onDelete;
   final Function _onClick;
   final _localization = Localization();
+
   FolderCard(
       {Key? key,
       required Folder folder,
       required Function onDelete,
       required Function onClick})
-      : _onClick = onClick, _onDelete = onDelete, _folder = folder,
+      : _onClick = onClick,
+        _onDelete = onDelete,
+        _folder = folder,
         super(key: key);
 
   @override
@@ -32,10 +35,13 @@ class FolderCard extends StatelessWidget {
             child: SizedBox(
                 width: 100,
                 height: 100,
-                child: Image.network(_folder.document[0].storageUrl))),
+                child: _folder.document.isNotEmpty
+                    ? Image.network(_folder.document[0].storageUrl)
+                    : const SizedBox())),
         Row(
           children: [
-            Text(localization!.folder_type(_folder.folderType.index.toString())),
+            Text(
+                localization!.folder_type(_folder.folderType.index.toString())),
             GestureDetector(
               onTap: () async {
                 await _onDelete();

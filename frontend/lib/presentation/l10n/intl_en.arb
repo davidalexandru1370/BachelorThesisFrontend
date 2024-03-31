@@ -78,7 +78,7 @@
       "error_code": {}
     }
   },
-  "folder_type": "{folder_type, select, 0 {Car from another country} 1 {Car registered in country} 2 {Car registered for the first time} other {Invalid folder type}}",
+  "folder_type": "{folder_type, select, 0 {Car from another country} 1 {Car registered for the first time} 2 {Car registered in country} other {Invalid folder}}",
   "@folder_type": {
     "placeholders": {
       "folder_type": {}

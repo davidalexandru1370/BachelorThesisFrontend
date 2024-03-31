@@ -21,7 +21,6 @@ class _ViewFolderScreenState extends State<ViewFolderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(folder.errors.toString());
     var localization = _localization.getAppLocalizations(context);
     return Scaffold(
       appBar: AppBar(),
@@ -33,7 +32,7 @@ class _ViewFolderScreenState extends State<ViewFolderScreen> {
                 child: Column(
               children: [
                 Text(
-                  "${localization!.folder}: ${localization.folder_type(folder.folderType.name)}",
+                  "${localization!.folder}: ${localization.folder_type(folder.folderType.index.toString())}",
                   style: const TextStyle(fontSize: 18),
                 ),
                 Text(
@@ -55,25 +54,23 @@ class _ViewFolderScreenState extends State<ViewFolderScreen> {
                     })
               ],
             )),
-            Container(
-              child: ListView.separated(
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                separatorBuilder: (context, index) => const Divider(),
-                itemBuilder: (context, index) => Card(
-                    child: Row(
-                  children: [
-                    SizedBox(
-                        width: 100,
-                        height: 100,
-                        child:
-                            Image.network(folder.document[index].storageUrl)),
-                    Text(
-                        " ${localization!.document_type(folder.document[index].documentType.name)}")
-                  ],
-                )),
-                itemCount: folder.document.length,
-              ),
+            ListView.separated(
+              shrinkWrap: true,
+              scrollDirection: Axis.vertical,
+              separatorBuilder: (context, index) => const Divider(),
+              itemBuilder: (context, index) => Card(
+                  child: Row(
+                children: [
+                  SizedBox(
+                      width: 100,
+                      height: 100,
+                      child:
+                          Image.network(folder.document[index].storageUrl)),
+                  Text(
+                      " ${localization!.document_type(folder.document[index].documentType.name)}")
+                ],
+              )),
+              itemCount: folder.document.length,
             ),
           ],
         ),

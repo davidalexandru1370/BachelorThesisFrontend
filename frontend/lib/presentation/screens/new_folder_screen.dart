@@ -1,11 +1,7 @@
 import 'dart:async';
-import 'dart:collection';
 import 'dart:io';
 
-import 'package:camera/camera.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/application/websocket/web_socket.dart';
 import 'package:frontend/domain/enums/folder_type.dart';
 import 'package:frontend/domain/models/entities/create_folder_notification.dart';
 import 'package:frontend/domain/models/entities/request/create_document.dart';
@@ -44,11 +40,18 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
   var _localization = Localization();
 
   @override
+  void initState() {
+    // TODO: implement initState
+    _dropdownValue = "";
+  }
+
+  @override
   Widget build(BuildContext context) {
     var localization = _localization.getAppLocalizations(context);
-    _folderTypes = FolderType.values.map((e) =>
+    _folderTypes = Map.fromEntries(FolderType.values
+        .map((e) =>
             MapEntry(e.index, localization!.folder_type(e.index.toString())))
-        as Map<int, String>;
+        .toList());
 
     if (_dropdownValue == "") {
       _dropdownValue =
@@ -274,7 +277,10 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
     var folder = CreateFolder(
       name: _dropdownValue,
       folderType: FolderType.values.firstWhere(
-          (element) => _folderTypes[element.index] == _dropdownValue),
+          (element) => _folderTypes[element.index] == _dropdownValue,
+          orElse: () {
+        return FolderType.values.first;
+      }),
       document: _images.map((e) => CreateDocument(image: e)).toList(),
     );
     try {

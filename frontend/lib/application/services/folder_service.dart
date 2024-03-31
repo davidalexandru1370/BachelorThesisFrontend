@@ -33,7 +33,8 @@ class FolderService {
     };
 
     var data = FormData.fromMap({
-      'name': '${folder.name}',
+      'name': folder.name,
+      'folderType': folder.folderType.index,
     });
 
     data.files.addAll([

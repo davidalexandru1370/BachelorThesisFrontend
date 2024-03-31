@@ -1,5 +1,4 @@
 import 'package:frontend/domain/enums/folder_type.dart';
-import 'package:frontend/domain/models/abstract/serializable_entity.dart';
 
 import 'create_document.dart';
 
