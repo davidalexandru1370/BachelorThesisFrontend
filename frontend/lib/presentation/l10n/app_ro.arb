@@ -68,5 +68,11 @@
     "placeholders": {
       "error_code": {}
     }
+  },
+  "folder_type": "{folder_type, select, 0 {Masina din afara tarii} 1 {Masina inmatriculata in tara} 2 {Masina inregistrata pentru prima data} other {Documente invalide}}",
+  "@folder_type": {
+    "placeholders": {
+      "folder_type": {}
+    }
   }
 }

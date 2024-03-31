@@ -2,24 +2,27 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/domain/models/entities/folder.dart';
 
+import '../l10n/app_l10n.dart';
+
 class FolderCard extends StatelessWidget {
   final Folder _folder;
-  final Function onDelete;
-  final Function onClick;
-
-  const FolderCard(
+  final Function _onDelete;
+  final Function _onClick;
+  final _localization = Localization();
+  FolderCard(
       {Key? key,
       required Folder folder,
-      required this.onDelete,
-      required this.onClick})
-      : _folder = folder,
+      required Function onDelete,
+      required Function onClick})
+      : _onClick = onClick, _onDelete = onDelete, _folder = folder,
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var localization = _localization.getAppLocalizations(context);
     return GestureDetector(
       onTap: () {
-        onClick();
+        _onClick();
       },
       child: Card(
           child:
@@ -32,10 +35,10 @@ class FolderCard extends StatelessWidget {
                 child: Image.network(_folder.document[0].storageUrl))),
         Row(
           children: [
-            Text(_folder.name),
+            Text(localization!.folder_type(_folder.folderType.index.toString())),
             GestureDetector(
               onTap: () async {
-                await onDelete();
+                await _onDelete();
               },
               child: const Icon(
                 Icons.delete,

@@ -33,7 +33,7 @@ class _ViewFolderScreenState extends State<ViewFolderScreen> {
                 child: Column(
               children: [
                 Text(
-                  "${localization!.folder}: ${folder.name}",
+                  "${localization!.folder}: ${localization.folder_type(folder.folderType.name)}",
                   style: const TextStyle(fontSize: 18),
                 ),
                 Text(
