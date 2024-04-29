@@ -9,12 +9,16 @@ class Folder extends SerializableEntity {
   String id;
   String name;
   FolderType folderType;
+  bool isCorrect;
+  List<String> errors;
   List<Document> document;
 
   Folder(
       {required this.id,
       required this.name,
       required this.folderType,
+      required this.isCorrect,
+      required this.errors,
       this.document = const []});
 
   @override
@@ -32,6 +36,9 @@ class Folder extends SerializableEntity {
       id: map['id'],
       name: map['name'],
       folderType: FolderType.values.firstWhere((e) => e.index == map['type']),
+      isCorrect: map['isCorrect'],
+      errors:
+          (map['errors'] as List<dynamic>).map((e) => e.toString()).toList(),
       document: (map['documents'] as List<dynamic>)
           .map((e) => Document.fromMap(e))
           .toList(),

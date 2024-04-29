@@ -1,10 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:camera/camera.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/application/websocket/web_socket.dart';
+import 'package:frontend/domain/enums/folder_type.dart';
 import 'package:frontend/domain/models/entities/create_folder_notification.dart';
 import 'package:frontend/domain/models/entities/request/create_document.dart';
 import 'package:frontend/domain/models/entities/request/create_folder.dart';
@@ -36,16 +34,28 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
   String _dropdownValue = "";
   final ImagePicker _imagePicker = ImagePicker();
   final FolderService _folderService = FolderService();
-  final WebSocketConnection _webSocketConnection = WebSocketConnection.instance;
   CreateFolderNotification _notification = CreateFolderNotification();
   StateSetter? _setModalState;
+  Map<int, String> _folderTypes = {};
   var _localization = Localization();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _dropdownValue = "";
+  }
 
   @override
   Widget build(BuildContext context) {
     var localization = _localization.getAppLocalizations(context);
+    _folderTypes = Map.fromEntries(FolderType.values
+        .map((e) =>
+            MapEntry(e.index, localization!.folder_type(e.index.toString())))
+        .toList());
+
     if (_dropdownValue == "") {
-      _dropdownValue = localization!.carFromAnotherCountry;
+      _dropdownValue =
+          FolderType.values.map((e) => _folderTypes[e.index]).first.toString();
     }
     return Scaffold(
       body: SizedBox(
@@ -57,35 +67,26 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
             Column(
               children: [
                 DropdownButton(
-                  value: _dropdownValue,
-                  onChanged: (value) {
-                    setState(() {
-                      _dropdownValue = value.toString();
-                    });
-                  },
-                  borderRadius: BorderRadius.circular(10),
-                  items: [
-                    DropdownMenuItem(
-                      value: localization!.carFromAnotherCountry,
-                      child: Text(localization.carFromAnotherCountry),
-                    ),
-                    DropdownMenuItem(
-                      value: localization.carNeverRegistered,
-                      child: Text(localization.carNeverRegistered),
-                    ),
-                    DropdownMenuItem(
-                      value: localization.carRegisteredInCountry,
-                      child: Text(localization.carRegisteredInCountry),
-                    ),
-                  ],
-                ),
+                    value: _dropdownValue,
+                    onChanged: (value) {
+                      setState(() {
+                        _dropdownValue = value.toString();
+                      });
+                    },
+                    borderRadius: BorderRadius.circular(10),
+                    items: _folderTypes.entries.map((e) {
+                      return DropdownMenuItem(
+                        value: localization!.folder_type(e.key.toString()),
+                        child: Text(localization.folder_type(e.key.toString())),
+                      );
+                    }).toList()),
                 PopupMenuButton(
                   position: PopupMenuPosition.under,
                   key: _popupMenuKey,
                   itemBuilder: (context) {
                     return [
                       PopupMenuItem(
-                        value: localization.camera,
+                        value: localization!.camera,
                         child: Row(
                           children: [
                             const Icon(Icons.camera_alt),
@@ -114,7 +115,7 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
                     onPressed: () {
                       _popupMenuKey.currentState!.showButtonMenu();
                     },
-                    child: Text(localization.addImage),
+                    child: Text(localization!.addImage),
                   ),
                 ),
                 Container(
@@ -275,10 +276,16 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
   Future<void> _onSubmit() async {
     var folder = CreateFolder(
       name: _dropdownValue,
+      folderType: FolderType.values.firstWhere(
+          (element) => _folderTypes[element.index] == _dropdownValue,
+          orElse: () {
+        return FolderType.values.first;
+      }),
       document: _images.map((e) => CreateDocument(image: e)).toList(),
     );
     try {
       SecureStorage _storage = SecureStorage();
+      _notification = CreateFolderNotification();
       var hubConnection = HubConnectionBuilder()
           .withUrl(
               ApiConstants.WEBSOCKET_URL + "/hubs/createFolder/notification",
@@ -298,6 +305,7 @@ class _CreateNewFolderScreenState extends State<CreateNewFolderScreen> {
         });
       });
       var createdFolder = await _folderService.createFolder(folder);
+      await hubConnection.stop();
       Navigator.pop(context);
       Navigator.pop(context, createdFolder);
     } on TimeoutException {

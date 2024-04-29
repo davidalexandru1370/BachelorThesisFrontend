@@ -169,30 +169,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                             )),
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.end,
-                        //   children: [
-                        //     Padding(
-                        //         padding: EdgeInsets.only(right: 20, top: 10),
-                        //         child: Consumer<LocaleModel>(
-                        //             builder: (context, localeModel, child) =>
-                        //                 GestureDetector(
-                        //                   onTap: () {
-                        //                     localeModel.setLocale(Locale(
-                        //                         localeModel.locale ==
-                        //                                 Locale('en')
-                        //                             ? 'ro'
-                        //                             : 'en'));
-                        //                   },
-                        //                   child: Text(
-                        //                     Localization()
-                        //                         .getAppLocalizations(context)!
-                        //                         .forgotPassword,
-                        //                     textAlign: TextAlign.right,
-                        //                   ),
-                        //                 )))
-                        //   ],
-                        // ),
                         const Padding(padding: EdgeInsets.all(5)),
                         Container(
                             decoration: BoxDecoration(

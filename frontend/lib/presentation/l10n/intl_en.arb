@@ -58,16 +58,30 @@
   "folder": "Folder",
   "romanian": "Romanian",
   "english": "English",
+  "folderIsComplete": "Folder is complete",
+  "folderIsIncomplete": "Folder is incomplete",
   "document_type": "{doc_type, select, identityCard {Identity card} ownershipContract {Ownership contract} unregisterVehicle {Unregistered vehicle document} other {Not found document}}",
   "@document_type": {
     "placeholders": {
       "doc_type": {}
     }
   },
+  "folder_error": "{error_code, select, 8 {Identity card was not found} 9 {Ownership contract was not found} 10 {Unregistered vehicle document was not found} other {Invalid documents}}",
+  "@folder_error": {
+    "placeholders": {
+      "error_code": {}
+    }
+  },
   "backend_error": "{error_code, select, 1 {Email address does not exist} 2 {Email address or password are incorrect} 3 {Not found} 4 {} 5 {Email Address already exists} other {Server error}}",
   "@backend_error": {
     "placeholders": {
       "error_code": {}
+    }
+  },
+  "folder_type": "{folder_type, select, 0 {Car from another country} 1 {Car registered for the first time} 2 {Car registered in country} other {Invalid folder}}",
+  "@folder_type": {
+    "placeholders": {
+      "folder_type": {}
     }
   }
 }
